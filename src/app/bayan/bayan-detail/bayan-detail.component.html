@@ -1,0 +1,259 @@
+<section *ngIf="verseType == 'Ashara Mubaraka'" id="secBType"  class=" pb-100">
+  <div class="container">
+      <div class="top-cta">
+          <div class="bread-crumbs">
+              <ul>
+                  <li><a href="bayan/bayan-menu" >Ashara Bayaan</a></li>
+                  /
+                  <li class="active"><a>Ashara Mubaraka
+                          {{content?.article?.year}}H</a></li>
+              </ul>
+          </div>
+      </div>
+      <div class="row justify-content-center equal-height admin-head-wrap flex-row-reverse">
+
+        <!-- // Side Bar  -->
+
+        <div *ngIf="verseType == 'Ashara Mubaraka'" class="col-lg-4 col-md-4 col-sm-12 col-12 bait-list">
+              <div class="admin-step-form-wrap bait-list-v-2 overflow-hddn">
+                  <div class="step-form-header">
+                      <h3 class="form-title">Select Majlis</h3>
+                  </div>
+                  <div class="step-form-body">
+                      <div class="bait-list-inner">
+                          <!-- if empty -->
+                          <!-- <div class="empty text-center">
+                                  <p>Empty States to be designed</p>
+                              </div> -->
+                          <ul>
+                           
+                              <ng-container *ngFor="let data of subArticles; let i = index ;">
+                                  <li class="bait-list-item font-kanz-ul-marjan active "   [ngClass]="{'active': data.id === activeId}"
+                                      [innerHTML]="toArabicNumber(i+1) + '&nbsp;&nbsp;' + data?.title"
+                                      (click)="getContentById(data?.id)">
+                                  </li>
+                              </ng-container>
+                          </ul>
+                      </div>
+                  </div>
+
+              </div>
+          </div>
+
+          <div class="col-12 d-sm-none">
+              <a class="bait-list-mobile text-primary fs-16 d-block" (click)="toggleMobileAsharaMenu()"><strong>Select Majlis</strong></a>
+          </div>
+          <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+              <div class="admin-step-form-wrap">
+                  <div class="step-form-header step-form-header-2">
+                      <h3 class="form-title font-kanz-ul-marjan">{{defaultContent?.subArticle?.title}} —
+                          {{toArabicNumber(defaultContent?.article?.year)}} </h3>
+                      <div class="edit-button-wrap">
+                          <button (click)="toggleDetails()" class="btn btn-secondary detail-btn">DETAILS <img
+                                  src="/assets/images/seacrh-dropdown-icon-copy.svg" alt=""
+                                  [class]="isTazyeenDisplayed ? 'active' : ''"></button>
+                          <button class="btn btn-secondary" data-toggle="tooltip" title="Coming soon!"><i
+                                  class="fa fa-volume-up"></i></button>
+                          <button class="btn btn-secondary" (click)="toggleTranslation()"><img
+                                  src="/assets/images/translation-icon.svg"></button>
+                          <!-- Only For Admins -->
+                          <!-- <button class="btn btn-secondary"><i class="fas fa-pencil-alt"></i></button> -->
+                      </div>
+                  </div>
+                  <div class="step-form-body border-b-r inner-qasida-bg">
+                      <div class="qasida-detail-card pb-50 over-hddn">
+                          <div class="qasida-detail-wrap">
+                              <h3 class="qasida-detail-head mb-20">
+                                {{defaultContent?.categoryName}}
+                              </h3>
+                              <p class="qasida-detail-sub">
+                                {{TextSplitPipe(defaultContent?.subArticle?.description)}}  •  {{toArabicNumber(defaultContent?.article?.year)}} H
+                                / {{defaultContent?.article?.yearEnglish}} • {{defaultContent?.article?.location}}
+                            </p>
+                            <br>
+                            <p class="qasida-detail-sub">
+                                {{defaultContent?.author?.description}}
+                            </p>
+                          </div>
+                          <div class="qasida-icon">
+                              <img src="/assets/images/ohbat-logo.svg" alt="">
+                          </div>
+                          <a href="" class="tanzeen-view" data-bs-toggle="modal" data-bs-target="#viewTazyeen">
+                              View Tazyeen
+                          </a>
+                      </div>
+                      <div class="row">
+                          <div class="col-sm-12">
+                              <p  class="fs-27 font-kanz-ul-marjan ashara-bayaan"  *ngIf="!isTranslated"
+                                  [innerHTML]="defaultContent?.gujrati">
+                              </p>
+                              <div class="text-center" *ngIf="isTranslated">
+                                  <br />
+                                  <br />
+                                  <br />
+                                  <img src="/assets/images/coming soon_icon copy@1x.svg">
+                                  <h4 class="text-primary text-center font-serif">Coming soon</h4>
+                                  <br />
+                                  <br />
+                                  <br />
+                              </div>
+                          </div>
+                      </div>
+                      <div class="bottom-pattern"></div>
+                  </div>
+
+              </div>
+              <div class="step-pagination">
+                  <button [disabled]="config.currentPage === 1" (click)="getMiqaatDetailByPage('previous')"
+                      class="btn btn-secondary btn-lg">
+                      previous page
+                  </button>
+                  <div class="page-num">
+                      <ul>
+                          <li class="active">
+                              <input type="number" min="1" max="{{config.totalItems}}"
+                                 [ngModel]="config.currentPage"
+                                  class="page-num-input">
+                          </li>
+                          /
+                          <li><a href="">{{config.totalItems}}</a></li>
+                      </ul>
+                  </div>
+                  <button [disabled]="config.currentPage === config.totalItems" (click)="getMiqaatDetailByPage('next')"
+                      class="btn btn-secondary btn-lg">
+                      next page
+                  </button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- ========= View Bait List On Mobile ============= -->
+  <div [class.active]="isMobileMenuActive" class="view-baits-mobile d-sm-none">
+      <div class="bottom-sheet-header">
+          <h4 class="text-primary mb-0">Select Majlis</h4>
+          <a (click)="toggleMobileAsharaMenu()" class="close-sheet"><img
+                  src="/assets/images/feedback-popup-close.svg"></a>
+      </div>
+
+      <div class="bait-list-inner">
+          <!-- if empty -->
+          <!-- <div class="empty text-center">
+              <p>Empty States to be designed</p>
+          </div> -->
+          <ul>
+            <ng-container *ngFor="let data of subArticles; let i = index ;">
+                <li class="bait-list-item font-kanz-ul-marjan active "   [ngClass]="{'active': data.id === activeId}"
+                    [innerHTML]="toArabicNumber(i+1) + '&nbsp;&nbsp;' + data?.title"
+                    (click)="getContentById(data?.id)">
+                </li>
+            </ng-container>
+          </ul>
+      </div>
+  </div>
+
+
+  <!-- ========= Tazyeen Modal ======== -->
+  <!-- Modal -->
+  <div class="modal fade" id="viewTazyeen" tabindex="-1" aria-labelledby="viewTazyeenLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="viewTazyeenLabel">Tazyeen {{defaultContent?.article.year}}H</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <!-- <img [src]="translation?.BookImageUrl" class="img-fluid"> -->
+                  <img src="./../../../assets//images/ashara-1441.jpeg" class="img-fluid">
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+<section id="secMType" *ngIf="verseType == 'Miqaat Mubarak'" class=" pb-100">
+  <div class="container">
+      <div class="top-cta">
+          <div class="bread-crumbs">
+              <ul>
+                  <li ><a href="bayan/bayan-menu">{{defaultContent?.categoryName}}</a></li>
+                  /
+                  <li class="active"><a> {{defaultContent?.author?.description}} </a></li>
+              </ul>
+          </div>
+      </div>
+      <div class="row justify-content-center equal-height admin-head-wrap flex-row-reverse">
+
+
+          <div class="col-12">
+              <div class="admin-step-form-wrap">
+                  <div class="step-form-header step-form-header-2">
+                      <h3 class="form-title font-kanz-ul-marjan">
+                          {{defaultContent?.article?.month}} {{toArabicNumber(defaultContent?.article?.year)}}—</h3>
+                      <div class="edit-button-wrap">
+                          <button (click)="toggleMiqaatDetails()" class="btn btn-secondary detail-btn">DETAILS <img
+                                  src="assets/images/seacrh-dropdown-icon-copy.svg" alt=""></button>
+                          <button class="btn btn-secondary" title="Coming soon"><i
+                                  class="fa fa-volume-up"></i></button>
+                          <!-- Only For Admins -->
+                          <!-- <button class="btn btn-secondary"><i class="fas fa-pencil-alt"></i></button> -->
+                      </div>
+                  </div>
+                  <div class="step-form-body border-b-r inner-qasida-bg ">
+                      <div [ngClass]="{'active' : isShowMiqaatDetails}" class="qasida-detail-card over-hddn">
+                          <div class="qasida-detail-wrap">
+                              <h3 class="qasida-detail-head">
+                                 {{defaultContent?.categoryName}}
+                              </h3>
+                              <p class="qasida-detail-sub">
+                                  {{ toArabicNumber(01) }} {{defaultContent?.subArticle?.month}} {{defaultContent?.article?.year}}
+                                  | {{defaultContent?.subArticle?.yearEnglish}}{{defaultContent?.subArticle?.monthEnglish}}
+                              </p>
+                              <br>
+                              <p class="qasida-detail-sub">
+                                  {{defaultContent?.subArticle?.title}} • {{defaultContent?.location}}
+                              </p>
+                              <p class="qasida-detail-sub">
+                                  {{defaultContent?.author?.description}}
+                              </p>
+                          </div>
+                          <div class="qasida-icon">
+                              <img src="assets/images/miqaat-icon.svg" alt="">
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-sm-12">
+                              <p class="font-kanz-ul-marjan ashara-bayaan">
+                                  {{defaultContent?.gujrati}}
+                              </p>
+                          </div>
+                      </div>
+                      <div class="bottom-pattern"></div>
+                  </div>
+
+                  <div class="step-pagination">
+                      <button [disabled]="config.currentPage === 1" (click)="getMiqaatDetailByPage('previous')"
+                          class="btn btn-secondary btn-lg">
+                          previous page
+                      </button>
+                      <div class="page-num">
+                          <ul>
+                              <li class="active">
+                                  <input type="number" min="1" max="{{config.totalItems}}"
+                                       [ngModel]="config.currentPage"
+                                      class="page-num-input">
+                              </li>
+                              /
+                              <li><a href="">{{config.totalItems}}</a></li>
+                          </ul>
+                      </div>
+                      <button [disabled]="config.currentPage === config.totalItems" (click)="getMiqaatDetailByPage('next')"
+                          class="btn btn-secondary btn-lg">
+                          next page
+                      </button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>

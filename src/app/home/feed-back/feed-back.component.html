@@ -1,0 +1,57 @@
+    <div class="modal-header">
+        <h5 class="modal-title" id="feedback">Your feedback*</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" (click)="close()">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form class="modal-form"  [formGroup]="feedbackForm" novalidate>
+            <div class="row">
+                <div class="col-lg-6 col-12 col-md-6">
+                    <label for="" class="input-label">Name*:</label> <br>
+                    <input type="text" class="form-input" placeholder="Enter Name" formControlName="name" />
+                </div>
+                <div class="col-lg-6 col-12 col-md-6">
+                    <label for="" class="input-label">Email id*:</label> <br>
+                    <input type="text" class="form-input" placeholder="Enter Email" formControlName="email" />
+                    <span *ngIf="feedbackForm.controls.email.errors?.pattern &&  feedbackForm.controls.email.touched"
+                        class="invalid-span">
+                        Email is not valid
+                    </span>
+                </div>
+                <div class="col-12">
+                    <label for="" class="input-label">Feedback Related To*:</label> <br>
+                    <div
+                        style="display: flex; align-items: center; justify-content: flex-start; padding-top: 7px; flex-wrap: wrap;">
+                        <div *ngFor="let type of feedBackTypes"> 
+                            <input type="radio" name="feedbackTypeSettingId" class="radio-input" value="{{type.Id}}"  formControlName="feedbackTypeSettingId"  /> 
+                            <label for="{{type.Id}}" class="radio-label">{{type.Name}}</label>
+                        </div>
+                        <!-- <div>
+                            <input type="radio" name="feedback" class="radio-input" id="technical_issue" /> <label
+                                for="technical_issue" class="radio-label">Technical
+                                Issue</label>
+                        </div>
+
+                        <div>
+                            <input type="radio" name="feedback" class="radio-input" id="report_a_bug" /> <label
+                                for="report_a_bug" class="radio-label">Report a
+                                bug</label>
+                        </div>
+                        <div>
+                            <input type="radio" class="radio-input" name="feedback" id="other" /> <label for="other"
+                                class="radio-label">Other</label>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-12">
+                    <textarea placeholder="Feedback Description" formControlName="feedbackDescription" ></textarea>
+                </div>
+                <div class="col-12 text-center">
+                    <button type="button" class="btn btn-primary btn-lg"  (click)="feedbackSubmit()"
+                    [disabled]="feedbackForm.invalid">Submit Feedback</button>
+                    <p>*We won't spam you, we just want to follow-up on bugs and reply to kind words :)</p>
+                </div>
+            </div>
+        </form>
+    </div>

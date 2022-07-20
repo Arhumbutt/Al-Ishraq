@@ -1,0 +1,191 @@
+<section id="secQasidaType"  class=" pb-100">
+  <div class="container">
+      <div class="top-cta">
+          <div class="bread-crumbs">
+              <ul>
+                  <li><a href="">Qasaid</a></li>
+                  /
+                  <li class="active font-amiri"><a href="">{{ translation?.title }}</a></li>
+              </ul>
+          </div>
+      </div>
+      <div class="row justify-content-center equal-height admin-head-wrap flex-row-reverse">
+
+          <div class="col-lg-4 col-md-4 col-sm-12 col-12 bait-list">
+              <div class="admin-step-form-wrap bait-list-v-2 overflow-hddn">
+                  <div class="step-form-header">
+                      <h3 class="form-title">Bait List</h3>
+                  </div>
+                  <div class="step-form-body">
+                      <div class="bait-list-inner">
+                          <!-- if empty -->
+                          <!-- <div class="empty text-center">
+                              <p>Empty States to be designed</p>
+                          </div> -->
+                          <ul>
+                              <ng-container *ngFor="let bayt of subArticles">
+                                  <li [class.active]="bayt.id == translation?.subArticle.subArticleId"
+                                      (click)="getQasidaContentBySubArticle(bayt.id)" class="bait-list-item font-amiri"
+                                      draggable="true">
+                                      {{ bayt.title }}
+                                  </li>
+                              </ng-container>
+                          </ul>
+                      </div>
+                  </div>
+
+              </div>
+          </div>
+
+          <div class="col-12 d-sm-none">
+              <a class="bait-list-mobile text-primary fs-16 d-block" (click)="toggleMobileAsharaMenu()"><strong>View Baits</strong></a>
+          </div>
+
+
+          <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+              <div class="admin-step-form-wrap">
+                  <div class="step-form-header step-form-header-2 font-amiri">
+                      <h3 class="form-title font-amiri">{{ translation?.title }}</h3>
+                      <div class="edit-button-wrap">
+                          <button (click)="toggleDetails()" class="btn btn-secondary detail-btn">
+                              <span class="d-none d-sm-inline">DETAILS</span> <img
+                                  [ngClass]="{'active' : isShowMiqaatDetails}"
+                                  src="/assets/images/seacrh-dropdown-icon-copy.svg" alt=""></button>
+                          <button class="btn btn-secondary"><i class="fa fa-volume-up"></i></button>
+                          <button class="btn btn-secondary"><i class="fas fa-pencil-alt"></i></button>
+                      </div>
+                  </div>
+                  <div class="step-form-body border-b-r inner-qasida-bg">
+                      <div [ngClass]="{'active' : isShowMiqaatDetails}" class="qasida-detail-card">
+                          <div class="qasida-detail-wrap">
+                              <h3 class="qasida-detail-head">
+                                  {{ translation?.BookNameDescription }}
+                              </h3>
+                              <p class="qasida-detail-sub mb-20">
+                                  Qasida - {{ translation?.QasidaNo }} • Page - {{ translation?.QasidaPageNo }}
+                              </p>
+                              <p class="qasida-detail-sub">
+                                  {{ translation?.SpeakerAuthorDescription }}
+                              </p>
+                              <p class="qasida-detail-sub">
+                                  IMO — {{ translation?.IMO }}
+                              </p>
+                          </div>
+                          <div class="qasida-icon">
+                              <img src="/assets/images/qasida-details-pattern.svg" alt="">
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-sm-12">
+                              <div class="bait-preview-main-wrap">
+                                  <div class="bait-preview-wrap mt-40">
+                                      <div class="sukhn-list-icon">
+                                          <p class="font-kanz-ul-marjan text-white fs-24">
+                                              {{translation?.number}}</p>
+                                      </div>
+                                      <div class="bait font-amiri fs-32 text-primary">
+                                          <div class="misra two-misra">
+                                              <span>
+                                                  {{ translation?.arabic.split('*')[0] }}
+                                              </span>
+                                              <span>
+                                                  {{ translation?.arabic.split('*')[1] }}
+                                              </span>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div class="bait-preview-main-wrap">
+                                  <div class="bait-preview-wrap">
+                                      <div class="arabic-trans">
+                                          <p class="font-kanz-ul-marjan fs-29">
+                                              {{ translation?.gujrati }}
+                                          </p>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div class="qasida-devider"></div>
+
+                              <div class="bait-preview-main-wrap">
+                                  <div class="bait-preview-wrap mt-40">
+                                      <div class="bait english-bait fs-14 text-primary">
+                                          <div class="misra two-misra">
+                                              <span>
+                                                  {{ translation?.romanUrdu.split('*')[0] }}
+                                              </span>
+                                              <span>
+                                                  {{ translation?.romanUrdu.split('*')[1] }}
+                                              </span>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div class="bait-preview-main-wrap">
+                                  <div class="bait-preview-wrap">
+                                      <div class="english-trans v-2 mb-40">
+                                          <p>
+                                              {{ translation?.english }}
+                                          </p>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="bottom-pattern"></div>
+                  </div>
+
+              </div>
+              <div class="step-pagination">
+                  <button [disabled]="config.currentPage === 1" (click)="getDetailByPage('previous')"
+                      class="btn btn-secondary btn-lg">
+                      previous page
+                  </button>
+                  <div class="page-num">
+                      <ul>
+                          <li class="active">
+                              <input type="number" min="1" max="{{config.totalItems}}"
+                                  [ngModel]="config.currentPage"
+                                  class="page-num-input">
+                          </li>
+                          /
+                          <li><a href="">{{config.totalItems}}</a></li>
+                      </ul>
+                  </div>
+                  <button [disabled]="config.currentPage === config.totalItems" (click)="getDetailByPage('next')"
+                      class="btn btn-secondary btn-lg">
+                      next page
+                  </button>
+
+              </div>
+
+
+          </div>
+
+          <!-- ========= View Bait List On Mobile ============= -->
+          <div [class.active]="isMobileMenuActive" class="view-baits-mobile d-sm-none">
+              <div class="bottom-sheet-header">
+                  <h4 class="text-primary mb-0">Bait List</h4>
+                  <a (click)="toggleMobileAsharaMenu()" class="close-sheet"><img src="/assets/images/feedback-popup-close.svg"></a>
+              </div>
+
+              <div class="bait-list-inner">
+                  <!-- if empty -->
+                  <!-- <div class="empty text-center">
+                          <p>Empty States to be designed</p>
+                      </div> -->
+                  <ul>
+                      <ng-container *ngFor="let bayt of qasidaBaytList">
+                          <li [class.active]="bayt.Id == translation?.Id" (click)="getQasidaContentBySubArticle(bayt.Id)"
+                              class="bait-list-item font-amiri" draggable="true">
+                              {{ bayt.arabic }}
+                          </li>
+                      </ng-container>
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>

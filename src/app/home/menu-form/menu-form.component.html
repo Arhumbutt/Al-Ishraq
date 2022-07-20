@@ -1,0 +1,326 @@
+<section class="search-result-section">
+  <div class="container">
+    <div class="row">
+      <div [class]="id == qamoos_type? '' : 'col-sm-10 offset-sm-1'">
+        <div class="search-main-head">
+          <h1 class="text-primary text-center font-serif inner-head">{{config.totalItems}} Qamoose</h1>
+        </div>
+
+        <form [class]="id == qamoos_type ? 'col-sm-10 offset-sm-1 search-form' : 'search-form '" [formGroup]="menuForm"
+          novalidate>
+
+
+          <div class="input-group">
+            <span class="input-group-text" id="addon-wrapping"><img src="assets/images/search.svg"
+                class="img-fluid"></span>
+            <div class="ng-autocomplete font-kanz-ul-marjan font-25">
+              <ng-autocomplete [data]="autoData" [debounceTime]="'600'" [isLoading]="isLoading"
+                [searchKeyword]="keyword" placeholder="Search {{name}}" (selected)='selectEvent($event)'
+                (inputChanged)='onChangeSearch($event)' historyIdentifier="autoData" [itemTemplate]="itemTemplate"
+                [notFoundTemplate]="notFoundTemplate" id="search_input"
+                class="city-search ui-autocomplete-input font-kanz-ul-marjan font-25" formControlName="searchText"
+                (inputChanged)="search($event)" (inputCleared)="closed()">
+              </ng-autocomplete>
+
+              <div class="search-dropdown" [hidden]="!(autoData?.length > 0)">
+                <ul>
+                  <ng-template #itemTemplate let-item>
+
+                    <a class="font-kanz-ul-marjan font-25" [hidden]="!(autoData?.length > 0)">
+                      <p class="font-kanz-ul-marjan text-primary" [innerHTML]="item.Text | highlight : toHighlight"></p>
+                    </a>
+
+                    <!-- <a class="font-kanz-ul-marjan font-25" [innerHTML]="item.Text | highlight : toHighlight"></a> -->
+                  </ng-template>
+                </ul>
+              </div>
+              <ng-template #notFoundTemplate let-notFound>
+                <div class="font-kanz-ul-marjan font-25" [innerHTML]="notFound" [hidden]="!isNotFound"></div>
+              </ng-template>
+
+              <button class="btn btn-primary btn-lg" type="submit" id="button-addon2"
+                (click)="searchWithText()">Search</button>
+
+            </div>
+          </div>
+        </form>
+
+        <div class="main-content-block">
+
+          <div class="sukhn-list-tab" style="margin-top: 40px;">
+            <!-- <ul class="sukhn-list" *ngIf="id != qamoos_type && id != bayaan_type && id != miqaat_type">
+              <ng-container *ngFor="let translation of translations  | paginate: config ;let indx = index">
+                <li class="cp" (click)="selectEvent(translation, indx)">
+                  <a class="d-flex">
+                    <div class="sukhn-list-icon fs-18 text-white">{{indx+1}}</div>
+                    <div class="sukhn-list-block">
+                      <p *ngIf="id != qasida_type" class="sukhn-arabi fs-32"
+                        [ngClass]="{'font-kanz-ul-marjan' : qType != id, 'font-amiri' : qType == id}"
+                        [innerHTML]="translation.hadithAr"></p>
+                        <p *ngIf="id == qasida_type" class="sukhn-arabi fs-32"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != id, 'font-amiri' : qType == id}"
+                          [innerHTML]="translation.InBookReferenceArabic"></p>
+                      <p *ngIf="id == qasida_type" class="sukhn-lsd" [ngClass]="{'font-kanz-ul-marjan' : qType != id, 'fs-20' : qType != id}">
+                        {{ constantService.getFirstName(translation.SpeakerAuthorDescription) }}
+                      </p>
+                      <p *ngIf="id !=qasida_type" class="sukhn-lsd" [ngClass]="{'font-kanz-ul-marjan' : qType != id, 'fs-20' : qType != id}"
+                        [innerHTML]="translation.GujratiText"></p>
+                      <p *ngIf="id !=qasida_type" class="fs-16 font-serif sukhn-english text-primary" [innerHTML]="translation.EnglishText"></p>
+                    </div>
+                  </a>
+                </li>
+              </ng-container>
+            </ul> -->
+            <table class="inner-table" >
+
+              <!-- headings -->
+              <thead>
+                <tr class="heading-row">
+                  <th>Arabic Word</th>
+                  <th>English Transliteration</th>
+                  <th>Actual Meaning</th>
+                  <th>Lisan-ud-dawat Meaning</th>
+                  <!-- <th>Urdu Meaning</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let translation of translations | paginate: config ;let indx = index"
+                  (click)="selectEvent(translation, indx)">
+                  <tr>
+                    <td class="fs-20 font-amiri">{{translation.wordEN }}</td>
+                    <td>{{translation.definationEN }}</td>
+                    <td>{{translation.definationId }}</td>
+                    <td class="fs-20 font-kanz-ul-marjan"> {{translation.wordId }}</td>
+                    <!-- <td class="font-urdu">{{translation. }}</td> -->
+                  </tr>
+                </ng-container>
+              </tbody>
+
+            </table>
+
+            <!--  -->
+            <div class="bayaan-tabs" *ngIf="(id == bayaan_type || id == miqaat_type) && !isSearchText">
+              <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" data-bs-toggle="tab" href="#ashara"
+                    (click)="togglePaginationDisplay('show') ; getBayanList('Ashara Mubaraka')"   role="tab">Ashara Mubaraka</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" (click)="togglePaginationDisplay('hide') ;  getBayanList('Miqaat Mubarak')" href="#miqaat"
+                    role="tab">Miqaat Mubarak</a>
+                </li>
+              </ul><!-- Tab panes -->
+              <div class="tab-content">
+                <div class="tab-pane pb-100 active" id="ashara" role="tabpanel">
+                  <div class="bayaan-grid-wrap">
+                    <div class="bayaan-grid">
+                      <ng-container *ngFor="let bayan of bayanListData  | paginate: config ;let indx = index"
+                        (click)="selectEvent(bayan, indx)">
+                        <a [routerLink]="[]" (click)="selectEvent(bayan)">
+                          <div class="bayaan-card">
+                            <div class="bayaan-img">
+                              <img src='./../../../assets/images/ashara-1441.jpeg' alt="ashara bayaan" class="img-fluid">
+                            </div>
+                            <div class="bayaan-title">
+                              <p [innerHtml]="toArabicNumber(bayan.year) + '—' + bayan.location "></p>
+                            </div>
+                          </div>
+                        </a>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane" id="miqaat" role="tabpanel">
+                  <div class="row justify-content-center equal-height admin-head-wrap flex-row-reverse">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 bait-list">
+                      <div class="admin-step-form-wrap bait-list-v-2 overflow-hddn">
+                        <div class="step-form-header">
+                          <h3 class="form-title">Select Year</h3>
+                        </div>
+                        <div class="step-form-body">
+                          <div class="bait-list-inner bayaan-list">
+                            <ul>
+                              <ng-container *ngFor="let yearInfo of bayanListData">
+                                <!-- (click)="switchMiqaatYear(yearInfo.year)" -->
+                                <li [ngClass]="{'active' : yearInfo.year == miqaat_year}" (click)="getAsharaList(yearInfo.id)"
+                                  class="bait-list-item active" draggable="true">
+                                  {{yearInfo.year}} ({{yearInfo.subArticleCount}} Bayaans)
+                                </li>
+                              </ng-container>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 d-sm-none">
+                      <a [routerLink]="[]" (click)="toggleMobileMenu()" class="bait-list-mobile text-primary fs-16 d-block"><strong>Select
+                          Year</strong></a>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                      <div class="admin-step-form-wrap">
+                        <div class="step-form-header miqaat-header">
+                          <h3 class="form-title">Miqaats</h3>
+                          <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                              data-bs-toggle="dropdown" aria-expanded="false">
+                              {{miqaatSelectedMonth}}
+                            </button>
+                            <ul class="dropdown-menu miqaat-month" aria-labelledby="dropdownMenuButton1">
+                              <li><a class="dropdown-item" [routerLink]="[]" (click)="filterByMonth(0)">All Months</a></li>
+                              <li *ngFor="let item of monthList ; let i=index">
+                                <a class="dropdown-item" [routerLink]="[]" (click)="filterByMonth(item)">{{item}}</a>
+                              </li>
+                            </ul>
+                          </div>
+
+                        </div>
+                        <div class="bayaan-bg border-b-r">
+                          <div class="step-form-body">
+                            <div class="row">
+                              <div class="col-12">
+                                <ng-container *ngFor="let miqaatBayan of subArticles ; let i=index">
+                                  <div class="miqaat-bayaan-head font-kanz-ul-marjan">
+                                    <span>
+                                      {{miqaatBayan?.month}}
+                                    </span>
+                                  </div>
+                                  <ul class="miqaat-bayaan-list">
+                                    <li *ngFor="let miq of miqaatBayan.title" class="font-kanz-ul-marjan">
+                                      <a [routerLink]="[]" (click)="getSubArticleDetail(miq.id)" >{{miq.title}}</a>
+                                    </li>
+                                  </ul>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="bayaan-tabs" *ngIf="(id == bayaan_type || id == miqaat_type) && isSearchText">
+
+              <div class="search-main-head">
+                <h3 class="text-primary text-center font-serif">{{config.totalItems}} Search results for
+                  “{{menuForm.controls.searchText.value}}” in Bayaan Mubarak</h3>
+              </div>
+
+              <ul class="nav nav-tabs mt-4" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" data-bs-toggle="tab" [routerLink]="[]" (click)="toggleBayanSearch('ashara')" role="tab">Ashara Mubaraka</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" [routerLink]="[]" (click)="toggleBayanSearch('miqaat')" role="tab">Miqaat Mubarak</a>
+                </li>
+              </ul><!-- Tab panes -->
+              <div class="tab-content">
+                <div class="tab-pane pb-100 active" id="asharaSearch" role="tabpanel">
+                  <div class="search-list">
+                    <ng-container *ngFor="let translation of translations  | paginate: config ;let indx = index">
+                      <div class="ashara-search-block" (click)="selectEvent(translation, indx)">
+                        <div class="search-block-head">
+                          <div class="bayaan-list-logo">
+                            <img src="assets/images/ashara-bayaan-logo.svg" class="img-fluid">
+                          </div>
+                          <div class="search-block-content">
+                            <h3 class="fs-20 text-primary  font-kanz-ul-marjan"
+                              [innerHTML]="toArabicNumber(translation.YearHijri) + '-' + translation.InBookReferenceArabic">
+                            </h3>
+                            <p class="fs-27  font-kanz-ul-marjan mb-0"
+                              [innerHTML]="highlightSearchedText(translation.GujratiText)"></p>
+                          </div>
+                        </div>
+
+                        <div class="search-block-bottom fs-14  font-kanz-ul-marjan">
+                          {{constantService.getFirstName(translation.SpeakerAuthorDescription)}}
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+                <div class="tab-pane" id="miqaatSearch" role="tabpanel">
+                  <div class="search-list">
+                    <ng-container *ngFor="let translation of translations  | paginate: config ;let indx = index">
+                      <div class="ashara-search-block" (click)="selectEvent(translation, indx)">
+                        <div class="search-block-head">
+                          <div class="bayaan-list-logo">
+                            <img src="assets/images/ashara-bayaan-logo.svg" class="img-fluid">
+                          </div>
+                          <div class="search-block-content">
+                            <h3 class="fs-20 text-primary  font-kanz-ul-marjan"
+                              [innerHTML]="toArabicNumber(translation.YearHijri) + '-' + translation.InBookReferenceArabic">
+                            </h3>
+                            <p class="fs-27  font-kanz-ul-marjan mb-0" [innerHTML]="highlightSearchedText(translation.GujratiText)">
+                            </p>
+                          </div>
+                        </div>
+
+                        <div class="search-block-bottom fs-14  font-kanz-ul-marjan">
+                          {{constantService.getFirstName(translation.SpeakerAuthorDescription)}}
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+
+            <!-- Pagination -->
+            <pagination-template *ngIf="isShowPagination" #p="paginationApi" [id]="config.id"
+              (pageChange)="onPageChange($event)">
+              <div class="sukhn-pagination">
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination">
+                    <li> <a class="prev-button cp" [class.inactiveLink]="p.isFirstPage()" (click)="p.previous()">
+                        < </a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link cp" *ngFor="let page of p.pages"
+                        [class.current]="p.getCurrent() === page.value" (click)="p.setCurrent(page.value)">
+                        <span [class.inactiveLink]="!(config.totalItems && config.totalItems > 0)" class="li-span"
+                          *ngIf="p.getCurrent() !== page.value">{{ page.label }}</span>
+                        <span [class.inactiveLink]="!(config.totalItems && config.totalItems > 0)" class="li-span"
+                          *ngIf="p.getCurrent() === page.value">{{ page.label }}</span>
+                      </a>
+                    </li>
+                    <li><a (click)="p.next()" [class.inactiveLink]="p.isLastPage()" class="next-button cp">
+                        >
+                      </a> </li>
+                  </ul>
+                </nav>
+              </div>
+
+            </pagination-template>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========= View Bait List On Mobile ============= -->
+<div *ngIf="id == miqaat_type" [ngClass]="{'active' : isShowMobileMenu}" class="view-baits-mobile d-sm-none">
+  <div class="bottom-sheet-header">
+      <h4 class="text-primary mb-0">Select Year</h4>
+      <a (click)="toggleMobileMenu()" class="close-sheet"><img src="assets/images/feedback-popup-close.svg"></a>
+  </div>
+
+  <div class="bait-list-inner bayaan-list">
+      <ul>
+        <ng-container *ngFor="let yearInfo of miqaatCountData">
+          <li [ngClass]="{'active' : yearInfo.YearHijri == miqaat_year}" (click)="switchMiqaatYear(yearInfo.YearHijri)"
+            class="bait-list-item active" draggable="true">
+            {{yearInfo.YearHijri}} ({{yearInfo.BayanCount}} Bayaans)
+          </li>
+        </ng-container>
+      </ul>
+  </div>
+</div>

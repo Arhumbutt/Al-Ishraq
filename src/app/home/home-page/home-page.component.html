@@ -1,0 +1,365 @@
+
+
+<section [class]="isSearchText? 'search-result-section' : 'home-search'">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-10 offset-sm-1">
+        <div class="search-main-head">
+          <h1 [class]="isSearchText? 'font-serif text-primary text-center inner-head' : 'font-serif text-primary text-center'">Al Ishraaq</h1>
+          <!-- <ul class="content-number fs-20 text-center">
+            <li *ngFor="let data of dataCount">
+              {{data.Count}} {{data.Name}}
+            </li>
+          </ul> -->
+        </div>
+
+        <form class="main-search mt-40" [formGroup]="homeForm" novalidate>
+          <div class="input-group">
+            <div class="search-input">
+              <span class="input-group-text" id="basic-addon1"><img src="assets/images/search.svg"
+                  class="img-fluid"></span>
+              <input type="text" class="form-control" placeholder="Search by any word" aria-label="Username"
+                aria-describedby="basic-addon1" formControlName="searchText">
+            </div>
+
+            <select class="form-select" id="inputGroupSelect01"  formControlName="verseType">
+              <option selected disabled value="0">Select Category</option>
+              <option *ngFor="let type of allVerseTypes" value="{{type.Description}}">{{type.Name}}</option>
+            </select>
+            <button class="btn btn-primary btn-lg" type="submit" (click)="searchByCategory()"
+              id="button-addon2">Search</button>
+          </div>
+          <!-- <div class="col-md-12" *ngIf="isValidUser">
+            <span class="btn btn-primary btn-lg add-span" (click)="addTranslation()">Add
+              Translation</span>
+          </div> -->
+          <!-- <div class="input-group">
+            <span class="input-group-text" id="addon-wrapping"><img src="assets/images/search.svg"
+                class="img-fluid"></span>
+            <input type="search" class="form-control fs-20" placeholder="Search Hadeeth, Kalaam, Aqwaal and Qasida here"
+              aria-label="Recipient's username" aria-describedby="button-addon2" formControlName="searchText">
+            <button class="btn btn-primary btn-lg" type="submit" id="button-addon2"
+              (click)="getAllTranslationTexts()">Search</button>
+          </div>
+          <div class="col-md-12" *ngIf="isValidUser">
+            <span class="btn btn-primary btn-lg add-span" (click)="addTranslation()">Add
+              Translation</span>
+          </div> -->
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Hadees of the Day Section =============== -->
+<ng-container>
+  <section class="content-of-day text-center" [hidden]="isSearchText">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 offset-sm-2">
+          <div class="slick-content-slider" id="slick-content-slider">
+            <ng-container *ngFor="let data of dataOfTheDay">
+              <div class="slick-slider-inner">
+                <h5 class="content-slider-type">{{data.Title}}</h5>
+                <!-- <p *ngIf="data.VerseTypeDescription == 'Bayaan'" class="font-kanz-ul-marjan slider-sukhn">{{data.Venue + " — "}} {{data.InBookReferenceArabic}}&nbsp;&nbsp;{{constantService.toArabicNumber(data.YearHijri) + "ھ "}}</p> -->
+                <p class="font-amiri slider-sukhn">{{data.ArabicText}}</p>
+                <p class="fs-32 font-kanz-ul-marjan">{{data.GujratiText}}</p>
+                <p class="slider-sukhn-translate text-primary font-serif fs-20">{{data.EnglishText}}</p>
+                <div class="slider-speaker">
+                  <p [innerHTML]="constantService.getSecondName(data.SpeakerAuthorDescription)"></p>
+                  <p class="font-kanz-ul-marjan fs-20"
+                    [innerHTML]="constantService.getFirstName(data.SpeakerAuthorDescription)"></p>
+                    <p *ngIf="data.VerseTypeDescription == 'Bayaan'" class="slider-speaker">{{data.InBookReference.substring(data.InBookReference.lastIndexOf('-'), data.InBookReference.lastIndexOf('-') + data.InBookReference.Length) + "—" + data.YearHijri + "H " + data.Venue}}</p>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-container>
+
+<section class="search-result-section" *ngIf="isSearchText">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-10 offset-sm-1">
+        <div class="search-result-block">
+          <h2 class="text-primary text-center font-serif"> {{config.totalItems}} Search results for
+            “{{searchedText}}”</h2>
+          <ul class="nav nav-pills" id="contentTabs" role="tablist" *ngIf="this.verseTypeId == 0">
+            <li class="nav-item cp" role="presentation" [class.first-li]="i == 0"
+              *ngFor="let allVerseType of allVerseTypes; let i = index" (click)="tabChange(allVerseType)">
+              <a class="nav-link" [class.main-active]="allVerseType.isActive" id="hadeesTab" data-bs-toggle="tab"
+                href="#hadeesTabContent" role="tab" aria-controls="hadeesTabContent" aria-selected="true">
+                {{allVerseType.Name}}
+              </a>
+            </li>
+          </ul>
+
+          <!-- Tabs Content -->
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="hadeesTabContent" role="tabpanel" aria-labelledby="hadeesTab">
+              <div class="sukhn-list-tab">
+                <ul class="sukhn-list" *ngIf="verseTypeId == 'Qamoos'">
+                  <li class="cp" *ngFor="let translation of translations  | paginate: config ;let indx = index"
+                    (click)="selectEvent(translation, indx)">
+                    <a class="d-flex">
+                      <div class="sukhn-list-icon fs-24 text-white">
+                        <p class="font-kanz-ul-marjan">{{(indx+1) + ((config.currentPage-1) * config.itemsPerPage)}}</p>
+                      </div>
+                      <div class="sukhn-list-block">
+                        <p class="sukhn-arabi fs-32"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'font-amiri' : qType == translation.VerseType}"
+                          [innerHTML]="translation.wordId"></p>
+                        <p class="sukhn-lsd font-kanz-ul-marjan fs-20"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'fs-20' : qType != translation.id}"
+                          [innerHTML]="translation.wordEN"></p>
+                        <p class="fs-16 font-serif sukhn-english text-primary" [innerHTML]="translation.definationEN">
+                        </p>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+                <ul class="sukhn-list" *ngIf="verseTypeId == 'Hadeeth'">
+                  <li class="cp" *ngFor="let translation of translations  | paginate: config ;let indx = index"
+                    (click)="selectEvent(translation, indx)">
+                    <a class="d-flex" (click)="navigateToHadeethDetailPage(translation.id , index)">
+                      <div class="sukhn-list-icon fs-24 text-white">
+                        <p class="font-kanz-ul-marjan">{{(indx+1) + ((config.currentPage-1) * config.itemsPerPage)}}</p>
+                      </div>
+                      <div class="sukhn-list-block">
+                        <p class="sukhn-arabi fs-32"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'font-amiri' : qType == translation.VerseType}"
+                          [innerHTML]="translation.hadithAr"></p>
+                        <p class="sukhn-lsd font-kanz-ul-marjan fs-20"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'fs-20' : qType != translation.id}"
+                          [innerHTML]="translation.hadithGr"></p>
+                        <p class="fs-16 font-serif sukhn-english text-primary" [innerHTML]="translation.hadithEn">
+                        </p>
+                      </div>  </a>
+                  </li>
+                </ul>
+                <ul class="sukhn-list" *ngIf="verseTypeId == 'Kalaam'">
+                  <li class="cp" *ngFor="let translation of translations  | paginate: config ;let indx = index"
+                    (click)="selectEvent(translation, indx)">
+                    <a class="d-flex" (click)="navigateToKalaamDetailPage(translation.id , index)">
+                      <div class="sukhn-list-icon fs-24 text-white">
+                        <p class="font-kanz-ul-marjan">{{(indx+1) + ((config.currentPage-1) * config.itemsPerPage)}}</p>
+                      </div>
+                      <div class="sukhn-list-block">
+                        <p class="sukhn-arabi fs-32"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'font-amiri' : qType == translation.VerseType}"
+                          [innerHTML]="translation.kalaamAr"></p>
+                        <p class="sukhn-lsd font-kanz-ul-marjan fs-20"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'fs-20' : qType != translation.id}"
+                          [innerHTML]="translation.kalaamGr"></p>
+                        <p class="fs-16 font-serif sukhn-english text-primary" [innerHTML]="translation.kalaamEn">
+                        </p>
+                      </div>  </a>
+                  </li>
+                </ul>
+                <ul class="sukhn-list" *ngIf="verseTypeId == 'Qasida'">
+                  <li class="cp" *ngFor="let translation of translations  | paginate: config ;let indx = index"
+                    (click)="selectEvent(translation, indx)">
+                    <a class="d-flex" (click)="navigateToQasidaDetailPage(translation.id , index)">
+                      <div class="sukhn-list-icon fs-24 text-white">
+                        <p class="font-kanz-ul-marjan">{{(indx+1) + ((config.currentPage-1) * config.itemsPerPage)}}</p>
+                      </div>
+                      <div class="sukhn-list-block">
+                        <p class="sukhn-arabi fs-32"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'font-amiri' : qType == translation.VerseType}"
+                          [innerHTML]="translation.kalamAr"></p>
+                        <p class="sukhn-lsd font-kanz-ul-marjan fs-20"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'fs-20' : qType != translation.id}"
+                          [innerHTML]="translation.kalamGr"></p>
+                        <p class="fs-16 font-serif sukhn-english text-primary" [innerHTML]="translation.kalamEn">
+                        </p>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+                <ul class="sukhn-list" *ngIf="verseTypeId == 'Aqwaal'">
+                  <li class="cp" *ngFor="let translation of translations  | paginate: config ;let indx = index"
+                    (click)="selectEvent(translation, indx)">
+                    <a class="d-flex" (click)="navigateToAqwaalDetailPage(translation.id , index)">
+                      <div class="sukhn-list-icon fs-24 text-white">
+                        <p class="font-kanz-ul-marjan">{{(indx+1) + ((config.currentPage-1) * config.itemsPerPage)}}</p>
+                      </div>
+                      <div class="sukhn-list-block">
+                        <p class="sukhn-arabi fs-32"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'font-amiri' : qType == translation.VerseType}"
+                          [innerHTML]="translation.aqwaalAr"></p>
+                        <p class="sukhn-lsd font-kanz-ul-marjan fs-20"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'fs-20' : qType != translation.id}"
+                          [innerHTML]="translation.aqwaalGr"></p>
+                        <p class="fs-16 font-serif sukhn-english text-primary" [innerHTML]="translation.aqwaalEn">
+                        </p>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+                <ul class="sukhn-list" *ngIf="verseTypeId == 'Ashara Mubaraka'">
+                  <li class="cp" *ngFor="let translation of translations  | paginate: config ;let indx = index"
+                    (click)="selectEvent(translation, indx)">
+                    <a class="d-flex" (click)="navigateToDetailPage(translation?.articleId)">
+                      <div class="sukhn-list-icon fs-24 text-white">
+                        <p class="font-kanz-ul-marjan">{{(indx+1) + ((config.currentPage-1) * config.itemsPerPage)}}</p>
+                      </div>
+                      <div class="sukhn-list-block">
+                        <p class="sukhn-arabi fs-32"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'font-amiri' : qType == translation.VerseType}"
+                          [innerHTML]="translation.arabic"></p>
+                        <p class="sukhn-lsd font-kanz-ul-marjan fs-20"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'fs-20' : qType != translation.id}"
+                          [innerHTML]="translation.gujrati"></p>
+                        <p class="fs-16 font-serif sukhn-english text-primary" [innerHTML]="translation.english">
+                        </p>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+                <ul class="sukhn-list" *ngIf="verseTypeId == 'Miqaat Mubarak'">
+                  <li class="cp" *ngFor="let translation of translations  | paginate: config ;let indx = index"
+                    (click)="selectEvent(translation, indx)">
+                    <a class="d-flex" (click)="navigateToDetailPage(translation?.subArticle?.id)">
+                      <div class="sukhn-list-icon fs-24 text-white">
+                        <p class="font-kanz-ul-marjan">{{(indx+1) + ((config.currentPage-1) * config.itemsPerPage)}}</p>
+                      </div>
+                      <div class="sukhn-list-block">
+                        <p class="sukhn-arabi fs-32"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'font-amiri' : qType == translation.VerseType}"
+                          [innerHTML]="translation.arabic"></p>
+                        <p class="sukhn-lsd font-kanz-ul-marjan fs-20"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.id, 'fs-20' : qType != translation.id}"
+                          [innerHTML]="translation.gujrati"></p>
+                        <p class="fs-16 font-serif sukhn-english text-primary" [innerHTML]="translation.english">
+                        </p>
+                      </div>
+                   </a>
+                  </li>
+                </ul>
+                
+
+                <!-- Pagination -->
+                <pagination-template #p="paginationApi" [id]="config.id" (pageChange)="onPageChange($event)">
+                  <div class="sukhn-pagination">
+                    <nav aria-label="Page navigation example">
+                      <ul class="pagination">
+                        <li> <a class="prev-button cp" [class.inactiveLink]="p.isFirstPage()" (click)="p.previous()">
+                            < </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link cp" *ngFor="let page of p.pages"
+                            [class.current]="p.getCurrent() === page.value" (click)="p.setCurrent(page.value)">
+                            <span [class.inactiveLink]="!(config.totalItems && config.totalItems > 0)" class="li-span"
+                              *ngIf="p.getCurrent() !== page.value">{{ page.label }}</span>
+                            <span [class.inactiveLink]="!(config.totalItems && config.totalItems > 0)" class="li-span"
+                              *ngIf="p.getCurrent() === page.value">{{ page.label }}</span>
+                          </a>
+                        </li>
+                        <li><a (click)="p.next()" [class.inactiveLink]="p.isLastPage()" class="next-button cp">
+                            >
+                          </a> </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </pagination-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== About Section ========================= -->
+<section class="about-sec">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h5 class="content-slider-type-1" style="margin-bottom: 0px;">About</h5>
+        <h1 class="fs-40 font-serif sec-head" style="display: inline-block;">Al-Ishraaq</h1>
+      </div>
+      <div class="col-12 text-center">
+        <h1 class="abt-head">The pearls in Rawdat-ul-Hidaya a nayab hadiyah by our Maula(TUS) are the light
+          which guides us to the righteous path. Alishraaq platform integrate with our lives digitallly. </h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4 text-center">
+        <div class="feature-block">
+          <div class="icon">
+            <img src="assets/images/custom_search.svg" class="img-fluid">
+          </div>
+          <h5 class="text-primary text-center fs-18">Customisable Search</h5>
+          <p>Search across all available genres, or in individual sectors with specific or general keywords</p>
+        </div>
+      </div>
+      <div class="col-sm-4 text-center">
+        <div class="feature-block">
+          <div class="icon">
+            <img src="assets/images/word_lookup.svg" class="img-fluid">
+          </div>
+          <h5 class="text-primary text-center fs-18">Word Lookup</h5>
+          <p>Hover over words to see definitions and pronunciation</p>
+        </div>
+      </div>
+      <div class="col-sm-4 text-center">
+        <div class="feature-block">
+          <div class="icon">
+            <img src="assets/images/daily_digest.svg" class="img-fluid">
+          </div>
+          <h5 class="text-primary fs-18">Daily Digest</h5>
+          <p>Subscribe to receive a daily digest curated by the Al Ishraaq team</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Subscription Section ============== -->
+
+<section class="email-subscription">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-12 bg-primary email-sub">
+        <h2 class="text-white text-center">Subscribe to recieve daily <br class="d-none d-sm-block"> Hadees, Kalaam &
+          Aqwaal!</h2>
+        <div class="row justify-content-center">
+          <div class="col-sm-12 col-lg-9 col-md-11">
+            <form class="subscription-form" [formGroup]="footerForm">
+              <div class="input-group" style="max-width: 500px; margin: 0px auto;">
+                <input type="search" class="form-control" formControlName="email" placeholder="Your Email"
+                  aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button class="btn btn-secondary btn-lg" type="submit" [disabled]="footerForm.invalid"
+                  (click)="subscribeEmail()" id="button-addon2">Subscribe</button>
+              </div>
+              <span class="text-white email-error"
+                *ngIf="footerForm.controls['email'].touched && footerForm.controls['email'].hasError('pattern')">
+                Please enter a valid email
+              </span>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-12 email-sub" style="background: #ab801b;">
+        <h2 class="text-white text-center">Have Suggestions? Found a bug? <br class="d-none d-sm-block"> Want to say thanks?</h2>
+        <div class="row">
+          <div class="col-sm-8 offset-sm-2">
+            <form class="subscription-form">
+              <div class="input-group">
+                <button class="btn btn-secondary btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#feedback"
+                  style="background:
+              #f9ecd1; margin: 0 auto;border: solid 2px #c7b77f;" type="submit" id="button-addon2"
+              (click)="openFeedBack()">give
+                  feedback</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

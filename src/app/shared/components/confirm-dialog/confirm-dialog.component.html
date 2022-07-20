@@ -1,0 +1,78 @@
+<!-- <div class="sensor-modal d-block" tabindex="-1" role="dialog">  
+    <div class="sensor-modal-dialog custom-alert center" role="document">  
+        <div class="sensor-modal-content">  
+  
+            <div *ngIf="message?.type == 'confirm'" class="sensor-modal-body">  
+                <div class="row">  
+                    <div class="col-md-12">  
+                        <p class="text-center confirm-message">{{message.text}}</p>  
+                    </div>  
+                </div>  
+                <div class="row">  
+                    <div class="col-md-12">  
+                        <p class="confirm-button">  
+                            <a (click)="message.siFn()">  
+                                <button class="btn btn-yes">Yes</button>  
+                            </a>  
+                            <a (click)="message.noFn()">  
+                                <button class="btn btn-no">No</button>  
+                            </a>  
+                        </p>  
+                    </div>  
+                </div>  
+            </div>  
+        </div>  
+    </div>  
+</div>  -->
+
+<!-- <div class="popup" onclick="myFunction()">Click me to toggle the popup!
+    <span class="popuptext" id="myPopup">A Simple Popup!</span>
+  </div> -->
+
+<!-- The sensor-modal -->
+<div id="mysensor-modal" (click)="close()" [class]="isOpen ? 'display-block sensor-modal' : 'display-none sensor-modal'">
+
+    <div class="sensor-modal-content">
+        <span class="close" (click)="close()">&times;</span>
+        <div *ngIf="message?.type == 'confirm'" class="sensor-modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="text-center confirm-message">{{message.text}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="confirm-button">
+                        <a (click)="message.siFn()">
+                            <button class="btn btn-yes">Yes</button>
+                        </a>
+                        <a (click)="message.noFn()">
+                            <button class="btn btn-no">No</button>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- <div *ngIf="message.type == 'confirm'"  class="mo2dal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="text-center">{{message.text}}</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p class="text-center">
+                <a (click)="message.noFn()">
+                    <button class="btn btn-pm">No</button>
+                </a>
+                <a (click)="message.siFn()">
+                    <button  class="btn btn-sc" >Yes</button>
+                </a>
+            </p>
+        </div>
+    </div>
+ </div> -->

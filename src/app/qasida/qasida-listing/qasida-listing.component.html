@@ -1,0 +1,97 @@
+<section class="search-result-section" >
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-10 offset-sm-1">
+        <div class="search-result-block">
+          <div class="search-main-head">
+            <h1 class="text-primary text-center font-serif inner-head">{{config.totalItems}} Qasida</h1>
+          </div>
+
+          <form [class]="id == qamoos_type ? 'col-sm-10 offset-sm-1 search-form' : 'search-form '" [formGroup]="searchForm"  novalidate>
+            <div class="input-group">
+              <span class="input-group-text" id="addon-wrapping"><img src="assets/images/search.svg"
+                  class="img-fluid"></span>
+              <div class="ng-autocomplete font-kanz-ul-marjan font-25">
+                <ng-autocomplete [data]="autoData" [debounceTime]="'600'" [isLoading]="isLoading"
+                  [searchKeyword]="keyword" placeholder="Search {{name}}"
+                  (inputChanged)='onChangeSearch($event)' historyIdentifier="autoData" [itemTemplate]="itemTemplate"
+                  [notFoundTemplate]="notFoundTemplate" id="search_input"
+                  class="city-search ui-autocomplete-input font-kanz-ul-marjan font-25" formControlName="searchText"
+                  (inputChanged)="search($event)" (inputCleared)="closed()">
+                </ng-autocomplete>
+
+                <div class="search-dropdown" [hidden]="!(autoData?.length > 0)">
+                  <ul>
+                    <ng-template #itemTemplate let-item>
+
+                      <a class="font-kanz-ul-marjan font-25" [hidden]="!(autoData?.length > 0)">
+                        <p class="font-kanz-ul-marjan text-primary" [innerHTML]="item.Text | highlight : toHighlight"></p>
+                      </a>
+
+                      <!-- <a class="font-kanz-ul-marjan font-25" [innerHTML]="item.Text | highlight : toHighlight"></a> -->
+                    </ng-template>
+                  </ul>
+                </div>
+                <ng-template #notFoundTemplate let-notFound>
+                  <div class="font-kanz-ul-marjan font-25" [innerHTML]="notFound" [hidden]="!isNotFound"></div>
+                </ng-template>
+
+                <button class="btn btn-primary btn-lg" type="submit" id="button-addon2"
+                (click)="searchHadeethData()">Search</button>
+
+              </div>
+            </div>
+          </form>
+
+
+          <!-- Tabs Content -->
+          <div class="tab-content" id="myTabContent" *ngIf="translations.length > 0">
+            <div class="tab-pane fade show active" id="hadeesTabContent" role="tabpanel" aria-labelledby="hadeesTab">
+              <div class="sukhn-list-tab">
+                <ul class="sukhn-list">
+                  <li class="cp" *ngFor="let translation of translations  | paginate: config ;let indx = index" >
+                    <a class="d-flex" (click)="navigateToDetailPage(translation.id , indx)" >
+                      <div class="sukhn-list-icon fs-24 text-white">
+                        <p class="font-kanz-ul-marjan">{{(indx+1) + ((config.currentPage-1) * config.itemsPerPage)}}</p>
+                      </div>
+                      <div class="sukhn-list-block" >
+                        <p class="sukhn-arabi fs-32"
+                          [ngClass]="{'font-kanz-ul-marjan' : qType != translation.VerseType, 'font-amiri' : qType == translation.VerseType}"
+                          [innerHTML]="translation.title"></p>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+
+                <!-- Pagination -->
+                <pagination-template *ngIf="translations.length > 0" #p="paginationApi" [id]="config.id" (pageChange)="onPageChange($event)">
+                  <div class="sukhn-pagination">
+                    <nav aria-label="Page navigation example">
+                      <ul class="pagination">
+                        <li> <a class="prev-button cp" [class.inactiveLink]="p.isFirstPage()" (click)="p.previous()">
+                            < </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link cp" *ngFor="let page of p.pages"
+                            [class.current]="p.getCurrent() === page.value" (click)="p.setCurrent(page.value)">
+                            <span [class.inactiveLink]="!(config.totalItems && config.totalItems > 0)" class="li-span"
+                              *ngIf="p.getCurrent() !== page.value">{{ page.label }}</span>
+                            <span [class.inactiveLink]="!(config.totalItems && config.totalItems > 0)" class="li-span"
+                              *ngIf="p.getCurrent() === page.value">{{ page.label }}</span>
+                          </a>
+                        </li>
+                        <li><a (click)="p.next()" [class.inactiveLink]="p.isLastPage()" class="next-button cp">
+                            >
+                          </a> </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </pagination-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

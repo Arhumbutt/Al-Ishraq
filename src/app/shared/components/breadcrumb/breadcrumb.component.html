@@ -1,0 +1,15 @@
+
+<div class="crumbs w-100" *ngIf="breadcrumbs && breadcrumbs.length > 1">
+  <li class="float-left" *ngFor="let breadcrumb of breadcrumbs;let last = last;">
+  <a class="cp" *ngIf="!last && breadcrumb.label != 'Home'" [routerLink]="breadcrumb.url"  routerLinkActive="router-link-active">
+    {{ breadcrumb.label }}
+  </a>
+  <a  class="cp" *ngIf="!last && breadcrumb.label == 'Home'"  (click)="home()"  routerLinkActive="router-link-active">
+    {{ breadcrumb.label }}
+  </a>
+  <span  *ngIf="!last" class="crumbs-span">/</span>
+  <span *ngIf="last" class="current" >{{ breadcrumb.label }}</span>
+  </li>
+
+</div>
+

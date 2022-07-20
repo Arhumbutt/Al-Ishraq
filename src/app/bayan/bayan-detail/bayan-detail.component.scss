@@ -1,0 +1,41 @@
+p.question-desc-arabic{
+  font-size: 24px !important;
+ }
+
+ p.question-desc-eng{
+     font-size: 24px !important;
+    }
+
+    .text-color{
+     color: #5b0000;
+    }
+
+    /* Chrome, Safari, Edge, Opera */
+ input::-webkit-outer-spin-button,
+ input::-webkit-inner-spin-button {
+   -webkit-appearance: none;
+   margin: 0;
+ }
+
+ /* Firefox */
+ input[type=number] {
+   -moz-appearance: textfield;
+ }
+
+ bait-list-v-2 .bait-list-item.active {
+  color: #5b0000;
+  position: relative;
+}
+.bait-list-v-2 .bait-list-item.active:after
+ {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-55%);
+  background: #5b0000;
+  width: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  height: 85%;
+ }

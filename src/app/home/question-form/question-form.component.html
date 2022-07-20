@@ -1,0 +1,200 @@
+<div class="breadcrumbs">
+    <section class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Translation </h1>
+            </div>
+            <div class="col-md-12">
+      
+                <app-breadcrumb></app-breadcrumb>
+            </div>
+        </div>
+    </section>
+</div>
+
+<section class="container main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-content">
+
+                <div class="boxedtitle page-title">
+                    <h2 style="color:white;">Translation </h2>
+                </div>
+                <p>Duis dapibus aliquam mi, eget euismod sem scelerisque ut. Vivamus at elit quis urna adipiscing
+                    iaculis. Curabitur vitae velit in neque dictum blandit. Proin in iaculis neque.</p>
+
+                <div class="form-style form-style-4">
+                    <form [formGroup]="questionForm" novalidate>
+                        <div class="form-style form-style-2">
+                            <p class="user-profile-p">
+                            <p>
+                                <label>Arabic Text</label>
+                                <textarea cols="40" rows="3" formControlName="arabicText" dir="rtl"></textarea>
+                                <span
+                                    *ngIf="questionForm.controls.arabicText.errors?.required &&  questionForm.controls.arabicText.touched"
+                                    class="invalid-span">
+                                    Please enter your arabic text
+                                </span>
+
+
+                                <span>Type the description thoroughly and in detail .</span>
+                            </p>
+                        </div>
+
+                        <div class="form-style form-style-2">
+                            <p class="user-profile-p">
+                            <p>
+                                <label>Gujrati Text</label>
+                                <textarea cols="40" rows="3" formControlName="gujratiText" dir="rtl"></textarea>
+                                <span
+                                    *ngIf="questionForm.controls.gujratiText.errors?.required &&  questionForm.controls.gujratiText.touched"
+                                    class="invalid-span">
+                                    Please enter your gujrati text
+                                </span>
+
+                                <span>Type the description thoroughly and in detail .</span>
+                            </p>
+                        </div>
+
+
+
+                        <div class="form-style form-style-2">
+                            <p class="user-profile-p">
+                            <p>
+                                <label>English Text</label>
+                                <textarea cols="40" rows="3" formControlName="englishText"></textarea>
+                                <span
+                                    *ngIf="questionForm.controls.englishText.errors?.required &&  questionForm.controls.englishText.touched"
+                                    class="invalid-span">
+                                    Please enter your english text
+                                </span>
+
+                                <span>Type the description thoroughly and in detail .</span>
+                            </p>
+                        </div>
+
+                        <div class="form-style form-style-2">
+                            <p class="user-profile-p">
+                            <p style="margin-bottom:0px;">
+                                <label>Tags</label>
+                                <!-- <input type="text" value="" data-role="tagsinput" placeholder="Add tags"
+                                    formControlName="tags" /> -->
+                                    <tag-input   formControlName="tagsArray"  [modelAsStrings]="true"  [theme]="'bootstrap'"  
+                                    class="form-control h-auto tags tag-padding">
+                                </tag-input>
+                                <span
+                                    *ngIf="questionForm.controls.tags.errors?.required &&  questionForm.controls.tags.touched"
+                                    class="invalid-span">
+                                    Please enter your tags
+                                </span>
+
+                            </p>
+                        </div>
+
+
+
+                        <div class="form-inputs clearfix">
+
+
+                            <p>
+                                <label class="required">Verse Type<span>*</span></label>
+                                <span class="styled-select">
+                                    <select formControlName="verseType">
+                                        <option [ngValue]="null">Select a verse type... </option>
+                                        <option *ngFor="let allVerseType of allVerseTypes" [value]="allVerseType.Id">
+                                            {{allVerseType.Name}}
+                                        </option>
+                                    </select>
+                                </span>
+                                <span
+                                    *ngIf="questionForm.controls.verseType.errors?.required &&  questionForm.controls.verseType.touched"
+                                    class="invalid-span">
+                                    Please enter your verse type
+                                    <br>
+                                </span>
+                                <span> Please section so easily for your question .</span>
+                            </p>
+                            <p>
+                                <label class="required">Book Name<span>*</span></label>
+                                <span class="styled-select">
+                                    <select formControlName="bookName">
+                                        <option [ngValue]="null">Select a book name... </option>
+                                        <option *ngFor="let allBookNameType of allBookNameTypes" [value]="allBookNameType.Id">
+                                            {{allBookNameType.Name}}
+                                        </option>
+                                    </select>
+                                </span>
+                                <span
+                                    *ngIf="questionForm.controls.bookName.errors?.required &&  questionForm.controls.bookName.touched"
+                                    class="invalid-span">
+                                    Please enter your book name
+                                    <br>
+
+                                </span>
+                                <span> Please section so easily for your question .</span>
+                            </p>
+                            <p>
+                                <label>Page Number</label>
+                                <input type="number" formControlName="bookPageNumber">
+                                <span
+                                    *ngIf="questionForm.controls.bookPageNumber.errors?.required &&  questionForm.controls.bookPageNumber.touched"
+                                    class="invalid-span">
+                                    Please enter your book page number
+                                    <br>
+                                </span>
+                                <span> Please section so easily for your question .</span>
+                            </p>
+                            <p>
+                                <label class="required">In-Book Ref<span>*</span></label>
+                                <input type="text" value="" formControlName="inBookReference">
+                                <span
+                                    *ngIf="questionForm.controls.inBookReference.errors?.required &&  questionForm.controls.inBookReference.touched"
+                                    class="invalid-span">
+                                    Please enter your in-book reference
+                                    <br>
+                                </span>
+                                <span> Please section so easily for your question .</span>
+                            </p>
+                            <p>
+                                <label class="required">Speaker/Author<span>*</span></label>
+                                <span class="styled-select">
+                                    <select formControlName="speakerAuthor" >
+                                        <option [ngValue]="null">Select a speaker/author... </option>
+                                        <option *ngFor="let allSpeakerAuthorType of allSpeakerAuthorTypes" [value]="allSpeakerAuthorType.Id">
+                                            {{allSpeakerAuthorType.Name}}
+                                        </option>
+                                    </select>
+                                    <span
+                                        *ngIf="questionForm.controls.speakerAuthor.errors?.required &&  questionForm.controls.speakerAuthor.touched"
+                                        class="invalid-span">
+                                        Please enter your speaker author
+                                    <br>
+                                </span>
+                                </span>
+                                <span> Please section so easily for your question .</span>
+                            </p>
+                            <p style="margin:0px;">
+                                <label>Select file</label>
+                            <div class="form-style form-style-2">
+                                <div class="fileinputs">
+                                    <input type="file" class="file" formControlName="bookImageUrl">
+                                    <div class="fakefile">
+                                        <button type="button" class="button small margin_0"></button>
+                                        <span class="brows"><i class="icon-arrow-up"></i>Browse</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <p class="form-submit">
+                            <input type="submit" value="Save"
+                                class="button color small login-submit submit" [disabled]="questionForm.invalid"
+                                (click)="save()">
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

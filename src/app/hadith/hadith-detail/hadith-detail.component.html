@@ -1,0 +1,63 @@
+<section id="secQtype" class="single-sukhn-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 offset-sm-2">
+                <div class="single-sukhn-block">
+                    <div class="single-sukhn-inner">
+                        <div class="single-sukhn-head d-flex align-items-center justify-content-between">
+                            <div class="sukhn-head-left">
+                                <h4 class="fs-24 text-primary">{{detailData?.metaData.titleEn}}</h4>
+                                <p class="fs-14 text-primary sukhn-meta d-flex">
+                                    <span>{{detailData?.metaData.volumeEng}} </span>
+                                </p>
+                                <p class="sukhn-speaker" *ngIf="detailData?.metaData.authorEng"
+                                    [innerHTML]="constantService.getSecondName(detailData?.metaData.authorEng)">
+                                </p>
+                                <p class="text-color font-kanz-ul-marjan font-20"
+                                    *ngIf="detailData?.metaData.authorGr"
+                                    [innerHTML]="constantService.getFirstName(detailData?.metaData.authorGr)">
+                                </p>
+                            </div>
+
+                            <div class="sukhn-head-right">
+                                <div class="sukhn-list-icon fs-24 text-white">{{hadithNo}}</div>
+                            </div>
+                        </div>
+
+                        <div class="sukh-main-area">
+                            <div class="single-sukhn-sec single-sukhn-arabic font-amiri fs-32"
+                                [class.active]="clickText == 'sukhnArabic'" type="button" id="sukhnArabic"
+                                (click)="copyToClipboard('sukhnArabic')" (mouseover)="changeStyle($event)"
+                                (mouseleave)="mouseLeave()">
+                                <span [innerHTML]="detailData?.hadithAr"></span>
+                                <span class="copy-btn">{{copy}}</span>
+                            </div>
+
+                            <div class="single-sukhn-sec single-sukhn-lsd" [ngClass]="{'font-kanz-ul-marjan' : qType != id, 'fs-20' : qType != id}"
+                            type="button" [class.active]="clickText == 'sukhnLsd'" id="sukhnLsd"
+                                (click)="copyToClipboard('sukhnLsd')" (mouseover)="changeStyle($event)"
+                                (mouseleave)="mouseLeave()">
+                                <span [innerHTML]="detailData?.hadithGr"></span>
+                                <span class="copy-btn">{{copy}}</span>
+                            </div>
+                            <div class="single-sukhn-sec single-sukhn-english font-serif text-primary fs-18"
+                                [class.active]="clickText == 'sukhnEnglish'" type="button" id="sukhnEnglish"
+                                (click)="copyToClipboard('sukhnEnglish')" (mouseover)="changeStyle($event)"
+                                (mouseleave)="mouseLeave()">
+                                <span [innerHTML]="detailData?.hadithEn"></span>
+                                <span class="copy-btn">{{copy}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="single-sukhn-footer d-flex align-items-center justify-content-between">
+                        <button class="btn btn-secondary btn-lg cp" (click)="getPage('previous')"
+                            [disabled]=" hadithNo === 1 ">Previous</button>
+                        <button class="btn btn-secondary btn-lg cp" (click)="getPage('next')"
+                            [disabled]="config.currentPage === config.totalItems || isNextDisabled">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

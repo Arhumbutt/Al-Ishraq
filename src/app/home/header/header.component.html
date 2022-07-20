@@ -1,0 +1,44 @@
+<header class="header user-header" id="header">
+  <div class="container-fluid">
+    <div class="header-main d-flex align-items-center justify-content-between">
+      <div class="header-left position-relative">
+        <div class="logo">
+          <a (click)="homePage()"><img src="assets/images/login.svg" class="img-fluid" /></a>
+        </div>
+      </div>
+
+      <div class="header-right d-flex align-items-center flex-row-reverse">
+        <div class="menu-wrapper" (click)="isActive = !isActive">
+          <div class="hamburger-menu" [class.animate]="isActive"></div>
+        </div>
+
+        <ul class="admin navigation-links desktop-nav">
+          <!-- <li *ngFor="let allVerseType of allVerseTypes; let i = index" [routerLinkActive]="'active'">
+             <a *ngIf="allVerseType.Id != 57" [routerLink]="[allVerseType.Name]">{{allVerseType.Name}}</a>
+            </li> -->
+            <li><a  [routerLink]="['/quran']">Quran</a></li>
+            <li><a  [routerLink]="['/qamoose']">Qamoose</a></li>
+            <li><a  [routerLink]="['/bayan']">Bayaan</a></li>
+            <li><a  [routerLink]="['/hadith']">Hadees</a></li>
+            <li><a  [routerLink]="['/kalam']">Kalam</a></li>
+            <li><a  [routerLink]="['/aqwal']">Aqwal</a></li>
+            <li><a  [routerLink]="['/qasida']">Qasida</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <nav class="mobile-nav" [class.active]="isActive">
+    <ul class="navigation-links mobile-navigation">
+       <li><a  [routerLink]="['/quran']">Quran</a></li>
+       <li><a  [routerLink]="['/qamoose']">Qamoose</a></li>
+       <li><a  [routerLink]="['/bayan']">Bayaan</a></li>
+       <li><a  [routerLink]="['/hadith']">Hadees</a></li>
+       <li><a  [routerLink]="['/kalam']">Kalam</a></li>
+       <li><a  [routerLink]="['/aqwal']">Aqwal</a></li>
+       <li><a  [routerLink]="['/qasida']">Qasida</a></li>
+      <!-- <li *ngFor="let allVerseType of allVerseTypes; let i = index" [routerLinkActive]="'active'">
+        <a *ngIf="allVerseType.Id != 57" [routerLink]="['/', allVerseType.Name]">{{allVerseType.Name}}</a>
+      </li> -->
+    </ul>
+  </nav>
+</header>

@@ -1,0 +1,52 @@
+
+
+// .breadcrumb {
+//   background: none;
+//   font-size: .9em;
+//   margin: 0;
+//   display: block;
+//   float: right;
+//   padding: 0px;
+
+//   a, span {
+//     color: $breadcrumbs-color;
+//   }
+
+//   a:hover, span:hover {
+//     color: $breadcrumbs-hover-color;
+//     text-decoration: none;
+//   }
+
+//   li {
+//     list-style: none;
+//     float: left;
+//     margin: 2px;
+//     cursor: pointer;
+//   }
+
+//   li:last-child {
+//     margin-right: 20px;
+//   }
+
+//   li::after {
+//     content: ' >';
+//     color: $breadcrumbs-color;
+//   }
+
+//   li:last-child::after {
+//     content: ''
+//   }
+
+//   :focus {
+//     outline: none;
+//   }
+// }
+
+.d-none{
+  display: none;
+}
+
+.d-block{
+  display: block;
+}
+

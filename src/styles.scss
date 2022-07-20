@@ -1,0 +1,118 @@
+// /* You can add global styles to this file, and also import other style files */
+
+.search-form .input-group input {
+  background: rgb(253, 248, 234) !important;
+  border-radius: 12px !important;
+  border: 2px solid rgb(133, 121, 77) !important;
+  padding-left: 56px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-radius: 12px !important;
+  height: 80px !important;
+}
+
+.ng-autocomplete {
+  margin-bottom: 40px;
+  width: 100% !important;
+}
+
+.autocomplete-container.active {
+  z-index: 1 !important;
+}
+
+.autocomplete-container .input-container .x {
+  margin-right: 150px !important;
+  margin-top: 20px !important;
+  z-index: 1000000;
+  .text-primary {
+    color: #620934 !important;
+  }
+}
+
+.suggestions-container {
+  border-radius: 12px !important;
+}
+
+.page-item .page-link.current {
+  background: url(assets/images/floral-bullet.svg) no-repeat;
+  background-size: 100% 100%;
+}
+
+.page-item .page-link.current {
+  z-index: 3;
+  color: #fff;
+}
+
+.cp {
+  cursor: pointer;
+}
+
+.cus-tabs {
+  margin-right: 10px;
+}
+
+.img-fluid :focus,
+.img-fluid :active,
+.logo :focus,
+.logo-main :focus {
+  outline: none !important;
+}
+
+.sukhn-tags ul li a {
+  margin-top: 10px;
+}
+
+.sukhn-tags ul li {
+  display: inline;
+}
+
+.font-20 {
+  font-size: 20px !important;
+}
+
+.font-25 {
+  font-size: 25px !important;
+}
+
+.font-30 {
+  font-size: 30px !important;
+}
+
+.autocomplete-container .input-container input {
+  font-size: 25px !important;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: #353030;
+  border: 2px solid transparent;
+  background-color: rgb(253 248 234 / 0.4);
+}
+.nav-pills .nav-link.main-active,
+.nav-pills .show > .nav-link {
+  color: #353030 !important;
+  background-color: #fdf8ea !important;
+  border: 2px solid #c7b77f !important;
+}
+
+.sk-fading-circle {
+  margin-right: 150px !important;
+  margin-top: 32px !important;
+}
+
+.font-amiri {
+  font-family: "Amiri";
+}
+
+@media (max-width: 768px) {
+  .search-form .input-group .btn-primary {
+    position: relative;
+    margin-left: 21px;
+    margin-top: 80px;
+    z-index: 0;
+  }
+  .autocomplete-container .input-container .x {
+    margin-right: 0px !important;
+  }
+}
+

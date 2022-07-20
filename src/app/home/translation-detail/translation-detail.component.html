@@ -1,0 +1,533 @@
+<!-- ========== Search Section =========== -->
+<section id="secQtype" *ngIf="verseType != bayan_Type && verseType != miqaat_type && verseType != qasida_type"
+    class="single-sukhn-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 offset-sm-2">
+                <div class="single-sukhn-block">
+                    <div class="single-sukhn-inner">
+                        <div class="single-sukhn-head d-flex align-items-center justify-content-between">
+                            <div class="sukhn-head-left">
+                                <h4 class="fs-24 text-primary">{{translation?.BookNameDescription}}</h4>
+                                <p class="fs-14 text-primary sukhn-meta d-flex">
+                                    <span>{{translation?.InBookReference}}, {{qType != verseType? 'PAGE': 'AYAT'}}
+                                        {{translation?.BookPageNumber}} </span>
+                                </p>
+                                <p class="sukhn-speaker" *ngIf="translation?.SpeakerAuthorDescription"
+                                    [innerHTML]="constantService.getSecondName(translation?.SpeakerAuthorDescription)">
+                                </p>
+                                <p class="text-color font-kanz-ul-marjan font-20"
+                                    *ngIf="translation?.SpeakerAuthorDescription"
+                                    [innerHTML]="constantService.getFirstName(translation?.SpeakerAuthorDescription)">
+                                </p>
+                            </div>
+
+                            <div class="sukhn-head-right">
+                                <div class="sukhn-list-icon fs-24 text-white">{{config.currentPage}}</div>
+                            </div>
+                        </div>
+
+                        <div class="sukh-main-area">
+                            <div class="single-sukhn-sec single-sukhn-arabic font-amiri fs-32"
+                                [class.active]="clickText == 'sukhnArabic'" type="button" id="sukhnArabic"
+                                (click)="copyToClipboard('sukhnArabic')" (mouseover)="changeStyle($event)"
+                                (mouseleave)="mouseLeave()">
+                                <span [innerHTML]="translation?.ArabicText"></span>
+                                <span class="copy-btn">{{copy}}</span>
+                            </div>
+
+                            <div class="single-sukhn-sec single-sukhn-lsd"
+                                [ngClass]="{'font-kanz-ul-marjan' : qType != verseType, 'fs-24' : qType != verseType}"
+                                type="button" [class.active]="clickText == 'sukhnLsd'" id="sukhnLsd"
+                                (click)="copyToClipboard('sukhnLsd')" (mouseover)="changeStyle($event)"
+                                (mouseleave)="mouseLeave()">
+                                <span [innerHTML]="translation?.GujratiText"></span>
+                                <span class="copy-btn">{{copy}}</span>
+                            </div>
+                            <div class="single-sukhn-sec single-sukhn-english font-serif text-primary fs-18"
+                                [class.active]="clickText == 'sukhnEnglish'" type="button" id="sukhnEnglish"
+                                (click)="copyToClipboard('sukhnEnglish')" (mouseover)="changeStyle($event)"
+                                (mouseleave)="mouseLeave()">
+                                <span [innerHTML]="translation?.EnglishText"></span>
+                                <span class="copy-btn">{{copy}}</span>
+                            </div>
+                        </div>
+
+                        <div class="sukhn-tags">
+                            <ul class="d-inline-block  align-items-center">
+                                <li *ngFor="let tag of tags; let i = index">
+                                    <a class="bg-primary cp" (click)="tagClick(tag)">
+                                        {{tag}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="single-sukhn-footer d-flex align-items-center justify-content-between">
+                        <button class="btn btn-secondary btn-lg cp" (click)="getAllTranslationTexts('previous')"
+                            [disabled]="config.currentPage === 1 ">Previous</button>
+                        <button class="btn btn-secondary btn-lg cp" (click)="getAllTranslationTexts('next')"
+                            [disabled]="config.currentPage === totalItem || isNextDisabled">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="secBType" *ngIf="verseType == bayan_Type" class=" pb-100">
+    <div class="container">
+        <div class="top-cta">
+            <div class="bread-crumbs">
+                <ul>
+                    <li><a [routerLink]="['', verseType, 'Bayaan']">Ashara Bayaan</a></li>
+                    /
+                    <li class="active"><a [routerLink]="['/tranlation-detail', 0, '?year=']">Ashara Mubaraka
+                            {{translation?.year}}H</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row justify-content-center equal-height admin-head-wrap flex-row-reverse">
+
+          <!-- // Side Bar  -->
+
+          <div class="col-lg-4 col-md-4 col-sm-12 col-12 bait-list">
+                <div class="admin-step-form-wrap bait-list-v-2 overflow-hddn">
+                    <div class="step-form-header">
+                        <h3 class="form-title">Select Majlis</h3>
+                    </div>
+                    <div class="step-form-body">
+                        <div class="bait-list-inner">
+                            <!-- if empty -->
+                            <!-- <div class="empty text-center">
+                                    <p>Empty States to be designed</p>
+                                </div> -->
+                            <ul>
+                                <ng-container *ngFor="let data of subArticles; let i = index;">
+                                    <li class="bait-list-item font-kanz-ul-marjan"
+                                        [innerHTML]="toArabicNumber(data?.id) + '&nbsp;&nbsp;' + data?.title"
+                                        (click)="getAsharaDetails(data?.id)">
+                                    </li>
+                                </ng-container>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-12 d-sm-none">
+                <a class="bait-list-mobile text-primary fs-16 d-block" (click)="toggleMobileAsharaMenu()"><strong>Select Majlis</strong></a>
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                <div class="admin-step-form-wrap">
+                    <div class="step-form-header step-form-header-2">
+                        <h3 class="form-title font-kanz-ul-marjan">{{translation?.subArticle?.title}} —
+                            {{toArabicNumber(translation?.article?.year)}} </h3>
+                        <div class="edit-button-wrap">
+                            <button (click)="toggleDetails()" class="btn btn-secondary detail-btn">DETAILS <img
+                                    src="/assets/images/seacrh-dropdown-icon-copy.svg" alt=""
+                                    [class]="isTazyeenDisplayed ? 'active' : ''"></button>
+                            <button class="btn btn-secondary" data-toggle="tooltip" title="Coming soon!"><i
+                                    class="fa fa-volume-up"></i></button>
+                            <button class="btn btn-secondary" (click)="toggleTranslation()"><img
+                                    src="/assets/images/translation-icon.svg"></button>
+                            <!-- Only For Admins -->
+                            <!-- <button class="btn btn-secondary"><i class="fas fa-pencil-alt"></i></button> -->
+                        </div>
+                    </div>
+                    <div class="step-form-body border-b-r inner-qasida-bg">
+                        <div class="qasida-detail-card pb-50 over-hddn">
+                            <div class="qasida-detail-wrap">
+                                <h3 class="qasida-detail-head mb-20">
+                                    Ashara Mubaraka
+                                </h3>
+                                <p class="qasida-detail-sub">
+                                    {{translation?.subArticle.title.substring(translation?.subArticle.title.lastIndexOf('-'),
+                                    translation?.subArticle.title.lastIndexOf('-') +
+                                    translation?.subArticle.title.Length)}} • {{toArabicNumber(translation?.article.year)}}
+                                    H / {{translation?.article?.created}} • {{translation?.article?.location}}
+                                </p>
+                                <p class="qasida-detail-sub">
+                                    {{translation?.SpeakerAuthorDescription}}
+                                </p>
+                            </div>
+                            <div class="qasida-icon">
+                                <img src="/assets/images/ohbat-logo.svg" alt="">
+                            </div>
+                            <a href="" class="tanzeen-view" data-bs-toggle="modal" data-bs-target="#viewTazyeen">
+                                View Tazyeen
+                            </a>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p *ngIf="isTranslated == false" class="fs-27 font-kanz-ul-marjan ashara-bayaan"
+                                    [innerHTML]="subArticleDetailData?.gujrati">
+                                </p>
+                                <div class="text-center" *ngIf="isTranslated">
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <img src="/assets/images/coming soon_icon copy@1x.svg">
+                                    <h4 class="text-primary text-center font-serif">Coming soon</h4>
+                                    <br />
+                                    <br />
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bottom-pattern"></div>
+                    </div>
+
+                </div>
+                <div class="step-pagination">
+                    <button [disabled]="config.currentPage === 1" (click)="getDetailByPage('previous')"
+                        class="btn btn-secondary btn-lg">
+                        previous page
+                    </button>
+                    <div class="page-num">
+                        <ul>
+                          <!-- (input)="getByPageNo($event.target.value)" -->
+                            <li class="active">
+                                <input type="number" min="1" max="{{config.totalItems}}"
+
+                                    [ngModel]="config.currentPage"
+                                    class="page-num-input">
+                            </li>
+                            /
+                            <li><a href="">{{config.totalItems}}</a></li>
+                        </ul>
+                    </div>
+                    <button [disabled]="config.currentPage === config.totalItems" (click)="getDetailByPage('next')"
+                        class="btn btn-secondary btn-lg">
+                        next page
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========= View Bait List On Mobile ============= -->
+    <div [class.active]="isMobileMenuActive" class="view-baits-mobile d-sm-none">
+        <div class="bottom-sheet-header">
+            <h4 class="text-primary mb-0">Select Majlis</h4>
+            <a (click)="toggleMobileAsharaMenu()" class="close-sheet"><img
+                    src="/assets/images/feedback-popup-close.svg"></a>
+        </div>
+
+        <div class="bait-list-inner">
+            <!-- if empty -->
+            <!-- <div class="empty text-center">
+                <p>Empty States to be designed</p>
+            </div> -->
+            <ul>
+                <ng-container *ngFor="let data of asharaList; let i = index;">
+                    <li class="bait-list-item active font-kanz-ul-marjan" (click)="getAsharaDetails(i)"
+                        [ngClass]="{'active' : i == selectedAsharaIndex}"
+                        [innerHTML]="toArabicNumber(data.InBookReference) + '&nbsp;&nbsp;' + data.InBookReferenceArabic"
+                        draggable="true">
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- ========= Tazyeen Modal ======== -->
+    <!-- Modal -->
+    <div class="modal fade" id="viewTazyeen" tabindex="-1" aria-labelledby="viewTazyeenLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewTazyeenLabel">Tazyeen {{translation?.article.year}}H</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- <img [src]="translation?.BookImageUrl" class="img-fluid"> -->
+                    <img src="./../../../assets//images/ashara-1441.jpeg" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="secMType" *ngIf="verseType == miqaat_type" class=" pb-100">
+    <div class="container">
+        <div class="top-cta">
+            <div class="bread-crumbs">
+                <ul>
+                    <li><a href="">Miqaat Bayaan</a></li>
+                    /
+                    <li class="active"><a href=""> Urus Mubarak Syedna Taher Saifuddin </a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row justify-content-center equal-height admin-head-wrap flex-row-reverse">
+
+
+            <div class="col-12">
+                <div class="admin-step-form-wrap">
+                    <div class="step-form-header step-form-header-2">
+                        <h3 class="form-title font-kanz-ul-marjan">
+                            {{translation?.InBookReferenceArabic}} {{toArabicNumber(translation?.YearHijri)}}—</h3>
+                        <div class="edit-button-wrap">
+                            <button (click)="toggleMiqaatDetails()" class="btn btn-secondary detail-btn">DETAILS <img
+                                    src="assets/images/seacrh-dropdown-icon-copy.svg" alt=""></button>
+                            <button class="btn btn-secondary" title="Coming soon"><i
+                                    class="fa fa-volume-up"></i></button>
+                            <!-- Only For Admins -->
+                            <!-- <button class="btn btn-secondary"><i class="fas fa-pencil-alt"></i></button> -->
+                        </div>
+                    </div>
+                    <div class="step-form-body border-b-r inner-qasida-bg ">
+                        <div [ngClass]="{'active' : isShowMiqaatDetails}" class="qasida-detail-card over-hddn">
+                            <div class="qasida-detail-wrap">
+                                <h3 class="qasida-detail-head">
+                                    Miqaat Mubarak
+                                </h3>
+                                <p class="qasida-detail-sub">
+                                    {{ toArabicNumber(01) }} {{translation?.MonthArabicName}} {{translation?.YearHijri}}
+                                    | March 01, 2021
+                                </p>
+                                <br>
+                                <p class="qasida-detail-sub">
+                                    {{translation?.InBookReferenceArabic}} • Mumbai
+                                </p>
+                                <p class="qasida-detail-sub">
+                                    {{translation?.SpeakerAuthorDescription}}
+                                </p>
+                            </div>
+                            <div class="qasida-icon">
+                                <img src="assets/images/miqaat-icon.svg" alt="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p class="font-kanz-ul-marjan ashara-bayaan">
+                                    {{translation?.GujratiText}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="bottom-pattern"></div>
+                    </div>
+
+                    <div class="step-pagination">
+                        <button [disabled]="config.currentPage === 1" (click)="getBayanDetails('previous')"
+                            class="btn btn-secondary btn-lg">
+                            previous page
+                        </button>
+                        <div class="page-num">
+                            <ul>
+                                <li class="active">
+                                    <input type="number" min="1" max="{{config.totalItems}}"
+                                        (input)="getByPageNo($event.target.value)" [ngModel]="config.currentPage"
+                                        class="page-num-input">
+                                </li>
+                                /
+                                <li><a href="">{{config.totalItems}}</a></li>
+                            </ul>
+                        </div>
+                        <button [disabled]="config.currentPage === config.totalItems" (click)="getBayanDetails('next')"
+                            class="btn btn-secondary btn-lg">
+                            next page
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section id="secQasidaType" *ngIf="verseType == qasida_type" class=" pb-100">
+    <div class="container">
+        <div class="top-cta">
+            <div class="bread-crumbs">
+                <ul>
+                    <li><a href="">Qasaid</a></li>
+                    /
+                    <li class="active font-amiri"><a href="">{{ translation?.InBookReferenceArabic }}</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row justify-content-center equal-height admin-head-wrap flex-row-reverse">
+
+            <div class="col-lg-4 col-md-4 col-sm-12 col-12 bait-list">
+                <div class="admin-step-form-wrap bait-list-v-2 overflow-hddn">
+                    <div class="step-form-header">
+                        <h3 class="form-title">Bait List</h3>
+                    </div>
+                    <div class="step-form-body">
+                        <div class="bait-list-inner">
+                            <!-- if empty -->
+                            <!-- <div class="empty text-center">
+                                <p>Empty States to be designed</p>
+                            </div> -->
+                            <ul>
+                                <ng-container *ngFor="let bayt of qasidaBaytList">
+                                    <li [class.active]="bayt.Id == translation?.Id"
+                                        (click)="getTranslationTextById(bayt.Id)" class="bait-list-item font-amiri"
+                                        draggable="true">
+                                        {{ bayt.ArabicText }}
+                                    </li>
+                                </ng-container>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-12 d-sm-none">
+                <a class="bait-list-mobile text-primary fs-16 d-block" (click)="toggleMobileAsharaMenu()"><strong>View Baits</strong></a>
+            </div>
+
+
+            <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                <div class="admin-step-form-wrap">
+                    <div class="step-form-header step-form-header-2 font-amiri">
+                        <h3 class="form-title font-amiri">{{ translation?.InBookReferenceArabic }}</h3>
+                        <div class="edit-button-wrap">
+                            <button (click)="toggleMiqaatDetails()" class="btn btn-secondary detail-btn">
+                                <span class="d-none d-sm-inline">DETAILS</span> <img
+                                    [ngClass]="{'active' : isShowMiqaatDetails}"
+                                    src="/assets/images/seacrh-dropdown-icon-copy.svg" alt=""></button>
+                            <button class="btn btn-secondary"><i class="fa fa-volume-up"></i></button>
+                            <button class="btn btn-secondary"><i class="fas fa-pencil-alt"></i></button>
+                        </div>
+                    </div>
+                    <div class="step-form-body border-b-r inner-qasida-bg">
+                        <div [ngClass]="{'active' : isShowMiqaatDetails}" class="qasida-detail-card">
+                            <div class="qasida-detail-wrap">
+                                <h3 class="qasida-detail-head">
+                                    {{ translation?.BookNameDescription }}
+                                </h3>
+                                <p class="qasida-detail-sub mb-20">
+                                    Qasida - {{ translation?.QasidaNo }} • Page - {{ translation?.QasidaPageNo }}
+                                </p>
+                                <p class="qasida-detail-sub">
+                                    {{ translation?.SpeakerAuthorDescription }}
+                                </p>
+                                <p class="qasida-detail-sub">
+                                    IMO — {{ translation?.IMO }}
+                                </p>
+                            </div>
+                            <div class="qasida-icon">
+                                <img src="/assets/images/qasida-details-pattern.svg" alt="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="bait-preview-main-wrap">
+                                    <div class="bait-preview-wrap mt-40">
+                                        <div class="sukhn-list-icon">
+                                            <p class="font-kanz-ul-marjan text-white fs-24">
+                                                {{translation?.BookPageNumber}}</p>
+                                        </div>
+                                        <div class="bait font-amiri fs-32 text-primary">
+                                            <div class="misra two-misra">
+                                                <span>
+                                                    {{ translation?.ArabicText.split('*')[0] }}
+                                                </span>
+                                                <span>
+                                                    {{ translation?.ArabicText.split('*')[1] }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bait-preview-main-wrap">
+                                    <div class="bait-preview-wrap">
+                                        <div class="arabic-trans">
+                                            <p class="font-kanz-ul-marjan fs-29">
+                                                {{ translation?.GujratiText }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="qasida-devider"></div>
+
+                                <div class="bait-preview-main-wrap">
+                                    <div class="bait-preview-wrap mt-40">
+                                        <div class="bait english-bait fs-14 text-primary">
+                                            <div class="misra two-misra">
+                                                <span>
+                                                    {{ translation?.EnglishText.split('*')[0] }}
+                                                </span>
+                                                <span>
+                                                    {{ translation?.EnglishText.split('*')[1] }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bait-preview-main-wrap">
+                                    <div class="bait-preview-wrap">
+                                        <div class="english-trans v-2 mb-40">
+                                            <p>
+                                                {{ translation?.EnglishTransText }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bottom-pattern"></div>
+                    </div>
+
+                </div>
+                <div class="step-pagination">
+                    <button [disabled]="config.currentPage === 1" (click)="getBayanDetails('previous')"
+                        class="btn btn-secondary btn-lg">
+                        previous page
+                    </button>
+                    <div class="page-num">
+                        <ul>
+                            <li class="active">
+                                <input type="number" min="1" max="{{config.totalItems}}"
+                                    (input)="getByPageNo($event.target.value)" [ngModel]="config.currentPage"
+                                    class="page-num-input">
+                            </li>
+                            /
+                            <li><a href="">{{config.totalItems}}</a></li>
+                        </ul>
+                    </div>
+                    <button [disabled]="config.currentPage === config.totalItems" (click)="getBayanDetails('next')"
+                        class="btn btn-secondary btn-lg">
+                        next page
+                    </button>
+
+                </div>
+
+
+            </div>
+
+            <!-- ========= View Bait List On Mobile ============= -->
+            <div [class.active]="isMobileMenuActive" class="view-baits-mobile d-sm-none">
+                <div class="bottom-sheet-header">
+                    <h4 class="text-primary mb-0">Bait List</h4>
+                    <a (click)="toggleMobileAsharaMenu()" class="close-sheet"><img src="/assets/images/feedback-popup-close.svg"></a>
+                </div>
+
+                <div class="bait-list-inner">
+                    <!-- if empty -->
+                    <!-- <div class="empty text-center">
+                            <p>Empty States to be designed</p>
+                        </div> -->
+                    <ul>
+                        <ng-container *ngFor="let bayt of qasidaBaytList">
+                            <li [class.active]="bayt.Id == translation?.Id" (click)="getTranslationTextById(bayt.Id)"
+                                class="bait-list-item font-amiri" draggable="true">
+                                {{ bayt.ArabicText }}
+                            </li>
+                        </ng-container>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
