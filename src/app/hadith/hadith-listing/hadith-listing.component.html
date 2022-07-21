@@ -1,5 +1,5 @@
 <section class="search-result-section" >
-  <div class="container" *ngIf="translations.length > 0">
+  <div class="container" *ngIf="translations?.length > 0">
     <div class="row">
       <div class="col-sm-10 offset-sm-1">
         <div class="search-result-block">
@@ -41,7 +41,7 @@
             </div>
           </form>
           <!-- Tabs Content -->
-          <div class="tab-content" id="myTabContent" *ngIf="translations.length > 0">
+          <div class="tab-content" id="myTabContent" *ngIf="translations?.length > 0">
             <div class="tab-pane fade show active" id="hadeesTabContent" role="tabpanel" aria-labelledby="hadeesTab">
               <div class="sukhn-list-tab">
                 <ul class="sukhn-list">
