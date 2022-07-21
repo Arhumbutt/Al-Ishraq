@@ -49,24 +49,22 @@
               <div class="tab-pane fade show active" id="hadeesTabContent" role="tabpanel" aria-labelledby="hadeesTab">
                 <div class="sukhn-list-tab">
                   <ul class="sukhn-list">
-                    <li class="cp" *ngFor="let translation of dataCollection | paginate: config ;let indx = index" >
-                      <ng-container *ngFor="let item of translation[indx]">
-                        <a class="d-flex" (click)="navigateToDetailPage(item.id , indx)" >
-                          <div class="sukhn-list-icon fs-24 text-white">
-                            <p class="font-kanz-ul-marjan">{{(indx+1) + ((config.currentPage-1) * config.itemsPerPage)}}</p>
-                          </div>
-                          <div class="sukhn-list-block" >
-                            <p class="sukhn-arabi fs-32"
-                              [ngClass]="{'font-kanz-ul-marjan' : qType != item.VerseType, 'font-amiri' : qType == translation.VerseType}"
-                              [innerHTML]="item?.arabic?.verseText"></p>
-                            <p class="sukhn-lsd font-kanz-ul-marjan fs-20"
-                              [ngClass]="{'font-kanz-ul-marjan' : qType != item.VerseType, 'fs-20' : qType != translation.VerseType}"
-                              [innerHTML]="item?.eng?.verseText"></p>
-                            <p class="fs-16 font-serif sukhn-english text-primary" [innerHTML]="item?.trans?.verseText">
-                            </p>
-                          </div>
-                        </a>
-                      </ng-container>
+                    <li class="cp" *ngFor="let item of dataCollection | paginate: config ;let indx = index" >
+                      <a class="d-flex" (click)="navigateToDetailPage(item.id , indx)" >
+                        <div class="sukhn-list-icon fs-24 text-white">
+                          <p class="font-kanz-ul-marjan">{{(indx+1) + ((config.currentPage-1) * config.itemsPerPage)}}</p>
+                        </div>
+                        <div class="sukhn-list-block" >
+                          <p class="sukhn-arabi fs-32"
+                            [ngClass]="{'font-kanz-ul-marjan' : qType != item.VerseType, 'font-amiri' : qType == item.VerseType}"
+                            [innerHTML]="item?.arabic?.verseText"></p>
+                          <p class="sukhn-lsd font-kanz-ul-marjan fs-20"
+                            [ngClass]="{'font-kanz-ul-marjan' : qType != item.VerseType, 'fs-20' : qType != item.VerseType}"
+                            [innerHTML]="item?.eng?.verseText"></p>
+                          <p class="fs-16 font-serif sukhn-english text-primary" [innerHTML]="item?.trans?.verseText">
+                          </p>
+                        </div>
+                      </a>
                     </li>
                   </ul>
   
@@ -88,6 +86,7 @@
                             </a>
                           </li>
                           <li><a (click)="p.next()" [class.inactiveLink]="p.isLastPage()" class="next-button cp">
+                              >
                             </a> </li>
                         </ul>
                       </nav>
