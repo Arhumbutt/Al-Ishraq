@@ -164,9 +164,10 @@ export class QuranListingComponent implements OnInit {
   //   }
   //   }
 
-  navigateToDetailPage(id , index)
+  navigateToDetailPage(translationId , chapterId , verseId )
   {
-    this.router.navigate(['quran/quran-detail'] , {queryParams:{id:id , recordNo: index +1 , currentPage: this.config.currentPage , totalItems:this.config.totalItems}})
+    debugger
+    this.router.navigate(['quran/quran-detail'] , {queryParams:{translationId:translationId , chapterId:chapterId, verseId:verseId }})
   }
     closed(): void {
       this.isNotFound = false;

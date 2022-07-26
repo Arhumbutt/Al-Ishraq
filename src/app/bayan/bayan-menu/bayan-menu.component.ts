@@ -82,7 +82,7 @@ export class BayanMenuComponent implements OnInit {
     }
     this.homeService.getArticlesByCategoryName(this.config).subscribe(data=>{
       this.config.totalItems = data.total;
-      this.bayanListData = data.data.sort((a,b) => 0 - (a > b ? -1 : 1));
+      this.bayanListData = data.data
 
       this.isShowPagination = true;
       this.isSearchText=false

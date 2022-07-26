@@ -62,7 +62,7 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  
+    this.getHadeethOfTheDayData()
     this.verserTypeIdEnum = VerserTypeIdEnum;
     this.bindForm();
     this.config.currentPage = this.constantService.defaultPage;
@@ -284,7 +284,16 @@ export class HomePageComponent implements OnInit {
     // }
     
   }
+  
+  getHadeethOfTheDayData()
+  {
 
+    this.homeService.getHadeethOfTheDay().subscribe(data=>{
+      this.isSearchText = false;
+         this.dataOfTheDay= data
+         console.log(this.dataOfTheDay)
+    })
+  }
   search(event): void {
     if (event) {
       this.toHighlight = event;

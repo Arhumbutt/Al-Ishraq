@@ -3,7 +3,7 @@ import { SharedDataService } from "../shared-service";
 import { ActivatedRoute , Router } from "@angular/router";
 import { ConstantService } from '@app/shared/services';
 import { HomeService } from '../../home/shared/home.service';
-
+import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-quran-detail',
   templateUrl: './quran-detail.component.html',
@@ -24,27 +24,37 @@ export class QuranDetailComponent implements OnInit {
     currentPage: this.constantService.defaultPage,
     totalItems: 0,
   };
+  payload={
+    translationId:0 ,
+    chapterId:0 ,
+    verseId:0 ,
+  }
+  dataCollection: any[];
+  chapterId: any;
+  verseId: any;
   constructor(private sharedDataService:SharedDataService ,private homeService: HomeService,private route:Router, private router:ActivatedRoute , private constantService:ConstantService ) { }
 
   ngOnInit(): void {
     this.router.queryParams.subscribe(params=>{
-      this.id= params.id
-      this.recordNo = Number(params.recordNo)
-      if(this.id)
+      this.payload.chapterId=params.chapterId
+      this.payload.verseId=params.verseId
+      this.payload.translationId=params.translationId
+      
+      if(this.payload)
       {
-        this.getQuranVerseById()
+        this.getQuranVerseById(this.payload)
       }
 
     })
-    this.sharedDataService.currentMessage.subscribe(message => {
-      this.dataList = message
-      this.config.totalItems= this.dataList.length
-      this.currentData = this.dataList.filter(f=> f.id == this.id)
-      this.detailData=this.currentData[0]
-      // console.log(this.detailData)
-      // this.config.currentPage= this.recordNo
+    // this.sharedDataService.currentMessage.subscribe(message => {
+    //   this.dataList = message
+    //   this.config.totalItems= this.dataList.length
+    //   this.currentData = this.dataList.filter(f=> f.id == this.id)
+    //   this.detailData=this.currentData[0]
+    //   // console.log(this.detailData)
+    //   // this.config.currentPage= this.recordNo
 
-    });
+    // });
   }
 
   copyToClipboard(containerid): void {
@@ -77,27 +87,44 @@ export class QuranDetailComponent implements OnInit {
       this.detailData=""
       this.index = this.recordNo
       this.detailData = this.dataList[this.index]
-      this.recordNo = this.recordNo + 1
-      this.route.navigate(['quran/quran-detail'] , {queryParams:{id:this.id , recordNo: this.recordNo , currentPage: this.config.currentPage , totalItems:this.config.totalItems}})
+      this.route.navigate(['quran/quran-detail'] , {queryParams:{translationId:this.id , chapterId: this.chapterId , verseId: this.verseId}})
 
     }
     else if (event == 'previous')
     {
       this.detailData=""
       this.detailData = this.dataList[this.index- 1]
-      this.recordNo = this.recordNo - 1
-
       this.route.navigate(['quran/quran-detail'] , {queryParams:{id:this.id , recordNo: this.recordNo , currentPage: this.config.currentPage , totalItems:this.config.totalItems}})
     }
 
 
   }
 
-  getQuranVerseById()
+  getQuranVerseById(payload)
   {
-    this.homeService.getQuranVerseById(this.id).subscribe(data=>{
-      this.detailData=data
-      console.log( 'detail',this.detailData)
+    forkJoin({
+      arabic:this.homeService.getQuranArabicVerseById(payload),
+      trans:this.homeService.getQuranEngVerseById(payload),
+      eng:this.homeService.getQuranTransVerseById(payload)
+    }).subscribe(({arabic, trans, eng})=>{
+      this.config.totalItems = Math.max(arabic.total, trans.total, eng.total)
+      this.config.currentPage = this.config.currentPage;
+      let arabicData = arabic;
+      let translatedData = trans;
+      let engData = eng;
+      let maxLength = Math.max(arabicData.length, translatedData.length, engData.length);
+      let finalCollection = [];
+      let i = 0;
+      while (i<maxLength) {
+        finalCollection.push({
+          arabic:arabicData[i],
+          trans:translatedData[i],
+          eng:engData[i]
+        })
+        i++;
+      }
+      this.dataCollection = finalCollection[0];
+      console.log(this.dataCollection)
     })
   }
 

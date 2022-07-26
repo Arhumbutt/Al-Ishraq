@@ -58,18 +58,18 @@
       <div class="row">
         <div class="col-sm-8 offset-sm-2">
           <div class="slick-content-slider" id="slick-content-slider">
-            <ng-container *ngFor="let data of dataOfTheDay">
+            <ng-container >
               <div class="slick-slider-inner">
-                <h5 class="content-slider-type">{{data.Title}}</h5>
+                <h5 class="content-slider-type">{{dataOfTheDay?.metaData?.titleEn}}</h5>
                 <!-- <p *ngIf="data.VerseTypeDescription == 'Bayaan'" class="font-kanz-ul-marjan slider-sukhn">{{data.Venue + " — "}} {{data.InBookReferenceArabic}}&nbsp;&nbsp;{{constantService.toArabicNumber(data.YearHijri) + "ھ "}}</p> -->
-                <p class="font-amiri slider-sukhn">{{data.ArabicText}}</p>
-                <p class="fs-32 font-kanz-ul-marjan">{{data.GujratiText}}</p>
-                <p class="slider-sukhn-translate text-primary font-serif fs-20">{{data.EnglishText}}</p>
+                <p class="font-amiri slider-sukhn">{{dataOfTheDay.hadithAr}}</p>
+                <p class="fs-32 font-kanz-ul-marjan">{{dataOfTheDay.hadithGr}}</p>
+                <p class="slider-sukhn-translate text-primary font-serif fs-20">{{dataOfTheDay?.hadithEn}}</p>
                 <div class="slider-speaker">
-                  <p [innerHTML]="constantService.getSecondName(data.SpeakerAuthorDescription)"></p>
+                  <p [innerHTML]="dataOfTheDay?.metaData?.authorEng"></p>
                   <p class="font-kanz-ul-marjan fs-20"
-                    [innerHTML]="constantService.getFirstName(data.SpeakerAuthorDescription)"></p>
-                    <p *ngIf="data.VerseTypeDescription == 'Bayaan'" class="slider-speaker">{{data.InBookReference.substring(data.InBookReference.lastIndexOf('-'), data.InBookReference.lastIndexOf('-') + data.InBookReference.Length) + "—" + data.YearHijri + "H " + data.Venue}}</p>
+                    >({{dataOfTheDay?.metaData?.authorGr}})</p>
+<!-- //<p *ngIf="data.VerseTypeDescription == 'Bayaan'" class="slider-speaker">{{data.InBookReference.substring(data.InBookReference.lastIndexOf('-'), data.InBookReference.lastIndexOf('-') + data.InBookReference.Length) + "—" + data.YearHijri + "H " + data.Venue}}</p> -->
                 </div>
               </div>
             </ng-container>
