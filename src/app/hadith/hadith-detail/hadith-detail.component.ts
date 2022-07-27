@@ -30,7 +30,7 @@ export class HadithDetailComponent implements OnInit {
   ngOnInit(): void {
     this.router.queryParams.subscribe(params=>{
       this.id= params.id
-      this.hadithNo = Number(params.recordNo)
+      // this.hadithNo = Number(params.recordNo)
       if(this.id)
       {
         this.getHadeethById()
@@ -40,8 +40,10 @@ export class HadithDetailComponent implements OnInit {
       this.dataList = message
       this.config.totalItems= this.dataList.length
       this.currentData = this.dataList.filter(f=> f.id == this.id)
-      this.detailData=this.currentData[0]
-
+      this.detailData = this.currentData[0]
+      const splitBy = 'Vol. 1 - Had.'
+      const splittedText =  this.detailData?.metaData?.volumeEng.split( splitBy );
+      this.hadithNo = Number(splittedText[1]) 
     });
   }
 
@@ -77,7 +79,7 @@ export class HadithDetailComponent implements OnInit {
       this.detailData = this.dataList[this.index]
       this.id = this.detailData.id
       this.hadithNo = this.hadithNo + 1
-      this.route.navigate(['hadith/hadith-detail'] , {queryParams:{id:this.id , recordNo: this.hadithNo , currentPage: this.config.currentPage , totalItems:this.config.totalItems}})
+      this.route.navigate(['hadith/hadith-detail'] , {queryParams:{id:this.id }})
 
     }
     else if (event == 'previous')

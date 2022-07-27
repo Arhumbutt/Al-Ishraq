@@ -138,9 +138,9 @@ export class HadithListingComponent implements OnInit {
   //   }
   //   }
 
-  navigateToDetailPage(id , index)
+  navigateToDetailPage(id)
   {
-    this.router.navigate(['hadith/hadith-detail'] , {queryParams:{id:id , recordNo: index + 1 , currentPage: this.config.currentPage , totalItems:this.config.totalItems}})
+    this.router.navigate(['hadith/hadith-detail'] , {queryParams:{id:id}})
   }
     closed(): void {
       this.isNotFound = false;

@@ -50,7 +50,7 @@
                 <div class="sukhn-list-tab">
                   <ul class="sukhn-list">
                     <li class="cp" *ngFor="let item of dataCollection | paginate: config ;let indx = index" >
-                      <a class="d-flex" (click)="navigateToDetailPage(item.id , indx)" >
+                      <a class="d-flex" (click)="navigateToDetailPage(item , indx)" >
                         <div class="sukhn-list-icon fs-24 text-white">
                           <p class="font-kanz-ul-marjan">{{(indx+1) + ((config.currentPage-1) * config.itemsPerPage)}}</p>
                         </div>

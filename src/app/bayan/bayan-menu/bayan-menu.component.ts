@@ -10,7 +10,7 @@ import { HomeService } from '../../home/shared/home.service';
   templateUrl: './bayan-menu.component.html',
   styleUrls: ['./bayan-menu.component.scss']
 })
-export class BayanMenuComponent implements OnInit {
+export class BayanMenuComponent implements OnInit  {
   config = {
     categoryName :"Ashara Mubaraka",
     itemsPerPage: this.constantService.defaultItemPerPage,
@@ -43,7 +43,7 @@ export class BayanMenuComponent implements OnInit {
   isShowMobileMenu: boolean = false;
   isShowPagination: boolean = true;
   articleId
-  dataList:any=[]
+  allSubArticles:any=[]
 
   translations: any;
   translationData: any;
@@ -86,12 +86,9 @@ export class BayanMenuComponent implements OnInit {
 
       this.isShowPagination = true;
       this.isSearchText=false
-      const index=0
-      let firstArticleId= data.data[index].id
+      let firstArticleId= this.bayanListData[0].id
       this.getAsharaList(firstArticleId)
-      if (this.miqaat_year == null) {
-        this.miqaat_year = this.bayanListData[0].year;
-      }
+      this.miqaat_year = this.bayanListData[0].year;
     })
       // this.config.totalItems = data.Data.TotalRecords;
       // this.config.currentPage = data.Data.PageNumber;
@@ -117,11 +114,11 @@ export class BayanMenuComponent implements OnInit {
         let month=''  , titleArray:any=[]
         this.subArticles=[]
 
-        let dataList= data.sort((a, b)=>  (a.month > b.month ? 1 : -1));
+        let allSubArticles= data.sort((a, b)=>  (a.month > b.month ? 1 : -1));
 
-        for( var i =0 ; i < dataList.length ; i++)
+        for( var i =0 ; i < allSubArticles.length ; i++)
         {
-           if(dataList[i].month != month)
+           if(allSubArticles[i].month != month)
            {
              if( month != '')
              {
@@ -134,10 +131,10 @@ export class BayanMenuComponent implements OnInit {
                 titleArray=[]
              }
            }
-           month= dataList[i].month
+           month= allSubArticles[i].month
            obj={
-            id:dataList[i].id ,
-            title:dataList[i].title,
+            id:allSubArticles[i].id ,
+            title:allSubArticles[i].title,
            }
            titleArray.push(obj)
            if(data.length == i+1)
@@ -151,19 +148,27 @@ export class BayanMenuComponent implements OnInit {
             this.subArticles.push(obj)
            }
         }
-        console.log(this.subArticles , 'sub')
-        this.dataList= this.subArticles
+        this.allSubArticles= this.subArticles
         // this.getMonthList()
       })
       //  this.monthList=[]
       // this.subArticles=[]
-      // this.dataList=[]
+      // this.allSubArticles=[]
       // for(let m=0 ; m < this.subArticles.length ; m++)
       // {
       //   let  month =this.subArticles[m].month
 
       //    this.monthList.push(month)
       // }
+  }
+
+  changeActiveYear(id){
+    let li = document.getElementById(id);
+    let allOtherli = document.querySelectorAll('li.bait-list-item')
+    allOtherli.forEach((li:HTMLElement)=>{
+      li.classList.remove('active')
+    })
+    li.classList.add('active');
   }
 
   togglePaginationDisplay(strShowHide): void{
@@ -196,7 +201,7 @@ export class BayanMenuComponent implements OnInit {
     
      if(month != "")
     {
-      this.subArticles = this.dataList.filter(f=> f.month == month)
+      this.subArticles = this.allSubArticles.filter(f=> f.month == month)
     }
     else
     {

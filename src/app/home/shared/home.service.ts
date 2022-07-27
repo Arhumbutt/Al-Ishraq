@@ -152,7 +152,7 @@ export class HomeService extends BaseService<any> {
     return this.get(this.apiService.homeApi + endPoint)
       .pipe(map((data: any) => data));
   }
-  getAllQuranArabic(config) {
+    getAllQuranArabic(config) {
     
     let endPoint = this.homeEndPoints.holyQuranEndpoint +'/'+ 1 + '?page=' + config.currentPage + '&pageSize=' + config.itemsPerPage ; 
     return this.get(this.apiService.homeApi + endPoint)
