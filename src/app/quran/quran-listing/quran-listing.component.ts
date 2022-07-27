@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConstantService } from '@app/shared/services';
 import { environment } from '@env/environment';
 import { forkJoin, Observable } from 'rxjs';
-import { concatMap, map, mergeMap } from 'rxjs/operators';
+import { concatMap, map, mergeMap, tap } from 'rxjs/operators';
 import { HomeService } from '../../home/shared/home.service';
 import { SharedDataService } from "./../shared-service";
 @Component({
@@ -76,72 +76,37 @@ export class QuranListingComponent implements OnInit {
   });
     ngOnInit(): void {
     window.scrollTo(0, 0);
-  
-        this.homeService.getAllQuranArabic(this.config).subscribe(async data=>{
-      // debugger
-      this.array1= await data.data
-      this.array1.forEach((list, index) => {
-        // debugger
-        this.dataCollection[index].arabic = list.verseText
-  
-      });
-    })
-      //  this.homeService.getAllQuranEng(this.config).subscribe(data=>{
-      //   this.array2=data.data
-
-      //   this.array2.forEach((data, index) => {
-
-      //     this.dataCollection[index].eng = data?.verseText
-    
-      //   });
-      //  })
-      //  this.homeService.getAllQuranEng(this.config).subscribe(data=>{
-      //   this.array3=data.data
-
-      //   this.array3.forEach((data, index) => {
-      //     this.dataCollection[index].trans = data?.verseText
-    
-      //   });
-      //  })
-      
-
-      
-
-      
-     console.log('collection',this.dataCollection)
-    // observable.subscribe({
-    //   next: (value) => 
-    //   {
-    //     arabic: value.arabic.data.map(d=>{d.verseText})
-    //     eng: value.eng.data.map(d=>{d.verseText})
-    //     arabic: value.trans.data.map(d=>{d.verseText})
-    //   },
-    //   complete: () => console.log('Completes with Success!'),
-    // });
-    // this.homeService.getAllQuranArabic(this.config).subscribe(data=>{
-    //   this.array1=data.data
-    // })
-    // this.homeService.getAllQuranEng(this.config).subscribe(data=>{
-    //   this.array2=data.data
-    // })
-    // this.homeService.getAllQuranEng(this.config).subscribe(data=>{
-    //   this.array3=data.data
-    // })
-    // forkJoin([this.array1, this.array2, this.array3])
-    // .pipe(map(([data1, data2 , data3]) => 
-    // {
-    //   console.log(data1)
-    //   console.log(data2)
-    //   console.log(data3)
-    // }))
+    this.getQuranList()
+    this.getAllVerseTypes()
   }
   getAllVerseTypes(): void {
     this.allVerseTypes = this.constantService.verseTypesData;
   }
   getQuranList()
   {
-    
-   
+    forkJoin({
+      arabic:this.homeService.getAllQuranArabic(this.config),
+      trans:this.homeService.getAllQuranTrans(this.config),
+      eng:this.homeService.getAllQuranEng(this.config)
+    }).subscribe(({arabic, trans, eng})=>{
+      this.config.totalItems = Math.max(arabic.total, trans.total, eng.total)
+      this.config.currentPage = this.config.currentPage;
+      let arabicData = arabic.data;
+      let translatedData = trans.data;
+      let engData = eng.data;
+      let maxLength = Math.max(arabicData.length, translatedData.length, engData.length);
+      let finalCollection = [];
+      let i = 0;
+      while (i<maxLength) {
+        finalCollection.push({
+          arabic:arabicData[i],
+          trans:translatedData[i],
+          eng:engData[i]
+        })
+        i++;
+      }
+      this.dataCollection = finalCollection;
+    })
   }
   onChangeSearch(text): void {
     this.isNotFound = false;
@@ -199,9 +164,9 @@ export class QuranListingComponent implements OnInit {
   //   }
   //   }
 
-  navigateToDetailPage(id , index)
+  navigateToDetailPage(item , index)
   {
-    this.router.navigate(['quran/quran-detail'] , {queryParams:{id:id , recordNo: index +1 , currentPage: this.config.currentPage , totalItems:this.config.totalItems}})
+    this.router.navigate(['quran/quran-detail'] , {queryParams:{id:item.arabic.chapterID, recordNo: index +1 , currentPage: this.config.currentPage , totalItems:this.config.totalItems}})
   }
     closed(): void {
       this.isNotFound = false;
@@ -257,7 +222,7 @@ export class QuranListingComponent implements OnInit {
       }
     }
     onPageChange(event): void {
-
+      window.scrollTo(0,0)
       this.config.currentPage = event;
       // if(this.id == this.bayaan_type && !this.isSearchText){
         this.getQuranList();

@@ -82,9 +82,9 @@
                         <ul>
                           <ng-container *ngFor="let yearInfo of bayanListData ">
                             <!-- (click)="switchMiqaatYear(yearInfo.year)" -->
-                            <li [ngClass]="{'active' : yearInfo.year == miqaat_year}" (click)="getAsharaList(yearInfo.id)"
-                              class="bait-list-item active" draggable="true">
-                              {{yearInfo.year}} ({{yearInfo.subArticleCount}} Bayaans)
+                            <li id="{{'years'+yearInfo.year}}" [ngClass]="{'active' : yearInfo.year == miqaat_year}" (click)="getAsharaList(yearInfo.id); changeActiveYear('years'+yearInfo.year)"
+                              class="bait-list-item" draggable="true">
+                              {{yearInfo.year}} {{miqaat_year}} ({{yearInfo.subArticleCount}} Bayaans)
                             </li>
                           </ng-container>
                         </ul>
@@ -106,9 +106,9 @@
                           {{miqaatSelectedMonth}}
                         </button>
                         <ul class="dropdown-menu miqaat-month" aria-labelledby="dropdownMenuButton1">
-                          <li><a class="dropdown-item"  (click)="getAsharaList()">All Months</a></li>
-                          <li *ngFor="let item of subArticles ; let i=index">
-                            <a class="dropdown-item" [routerLink]="" (click)="filterByMonth(item?.month)">All Months</a>
+                          <li><a class="dropdown-item"  (click)="getAsharaList(articleId)">All Months</a></li>
+                          <li *ngFor="let item of allSubArticles ; let i=index">
+                            <!-- <a class="dropdown-item" [routerLink]="" (click)="filterByMonth(item?.month)">All Months</a> -->
                             <a class="dropdown-item" [routerLink]="" (click)="filterByMonth(item?.month)">{{item?.month}}</a>
                           </li>
                         </ul>
@@ -227,7 +227,7 @@
       <ul>
         <ng-container *ngFor="let yearInfo of bayanListData ">
           <li [ngClass]="{'active' : yearInfo.year == miqaat_year}" (click)="getAsharaList(yearInfo.id)"
-            class="bait-list-item active" draggable="true">
+            class="bait-list-item" draggable="true">
             {{yearInfo.year}} ({{yearInfo.subArticleCount}} Bayaans)
           </li>
         </ng-container>
