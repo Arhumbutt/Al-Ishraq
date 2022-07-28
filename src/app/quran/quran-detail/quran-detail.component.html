@@ -7,13 +7,13 @@
                         <div class="single-sukhn-head d-flex align-items-center justify-content-between">
                             <div class="sukhn-head-left">
                                 <h4 class="fs-24 text-primary">QURAN AL-MAJID</h4>
-                                <p class="sukhn-speaker">JUZ {{dataCollection['arabic'].chapterNumber}} - {{dataCollection['arabic'].chapterName}}, AYAT {{dataCollection['arabic'].verseId}}
+                                <p class="sukhn-speaker">JUZ {{dataCollection?.arabic?.chapterNumber}} - {{dataCollection?.arabic?.chapterName}}, AYAT {{dataCollection?.arabic?.verseId}}
                                 </p>
                                
                             </div>
 
                             <div class="sukhn-head-right">
-                                <div class="sukhn-list-icon fs-24 text-white">{{(dataCollection['arabic'].verseId)-1}}</div>
+                                <div class="sukhn-list-icon fs-24 text-white">{{(dataCollection?.arabic?.verseId)-1}}</div>
                             </div>
                         </div>
 
@@ -22,7 +22,7 @@
                                 [class.active]="clickText == 'sukhnArabic'" type="button" id="sukhnArabic"
                                 (click)="copyToClipboard('sukhnArabic')" (mouseover)="changeStyle($event)"
                                 (mouseleave)="mouseLeave()">
-                                <span [innerHTML]="dataCollection['arabic'].verseText"></span>
+                                <span [innerHTML]="dataCollection?.arabic?.verseText"></span>
                                 <span class="copy-btn">{{copy}}</span>
                             </div>
 
@@ -31,14 +31,14 @@
                                 type="button" [class.active]="clickText == 'sukhnLsd'" id="sukhnLsd"
                                 (click)="copyToClipboard('sukhnLsd')" (mouseover)="changeStyle($event)"
                                 (mouseleave)="mouseLeave()">
-                                <span [innerHTML]="dataCollection['trans'].verseText"></span>
+                                <span [innerHTML]="dataCollection?.trans?.verseText"></span>
                                 <span class="copy-btn">{{copy}}</span>
                             </div>
                             <div class="single-sukhn-sec single-sukhn-english font-serif text-primary fs-18"
                                 [class.active]="clickText == 'sukhnEnglish'" type="button" id="sukhnEnglish"
                                 (click)="copyToClipboard('sukhnEnglish')" (mouseover)="changeStyle($event)"
                                 (mouseleave)="mouseLeave()">
-                                <span [innerHTML]="dataCollection['eng'].verseText"></span>
+                                <span [innerHTML]="dataCollection?.eng?.verseText"></span>
                                 <span class="copy-btn">{{copy}}</span>
                             </div>
                         </div>

@@ -29,7 +29,7 @@ export class QuranDetailComponent implements OnInit {
     chapterId:0 ,
     verseId:0 ,
   }
-  dataCollection: any[];
+  dataCollection: any = [];
   chapterId: any;
   verseId: any;
   constructor(private sharedDataService:SharedDataService ,private homeService: HomeService,private route:Router, private router:ActivatedRoute , private constantService:ConstantService ) { }
@@ -39,7 +39,7 @@ export class QuranDetailComponent implements OnInit {
       this.payload.chapterId=params.chapterId
       this.payload.verseId=params.verseId
       this.payload.translationId=params.translationId
-      
+      console.log(this.payload, 'what is in payload')
       if(this.payload)
       {
         this.getQuranVerseById(this.payload)
@@ -84,16 +84,11 @@ export class QuranDetailComponent implements OnInit {
   {
     if(event == 'next')
     {
-      this.detailData=""
-      this.index = this.recordNo
-      this.detailData = this.dataList[this.index]
-      this.route.navigate(['quran/quran-detail'] , {queryParams:{translationId:this.id , chapterId: this.chapterId , verseId: this.verseId}})
+      this.route.navigate(['quran/quran-detail'] , {queryParams:{translationId:this.payload.translationId , chapterId: this.payload.chapterId , verseId: this.payload.verseId}})
 
     }
     else if (event == 'previous')
     {
-      this.detailData=""
-      this.detailData = this.dataList[this.index- 1]
       this.route.navigate(['quran/quran-detail'] , {queryParams:{id:this.id , recordNo: this.recordNo , currentPage: this.config.currentPage , totalItems:this.config.totalItems}})
     }
 
@@ -124,7 +119,6 @@ export class QuranDetailComponent implements OnInit {
         i++;
       }
       this.dataCollection = finalCollection[0];
-      console.log(this.dataCollection)
     })
   }
 

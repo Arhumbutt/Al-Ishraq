@@ -7,25 +7,24 @@
               <h1 class="text-primary text-center font-serif inner-head">{{config.totalItems}} Quran</h1>
             </div>
   
-            <form [class]="id == qamoos_type ? 'col-sm-10 offset-sm-1 search-form' : 'search-form '" [formGroup]="searchForm"  novalidate>
+            <form [class]="id == qamoos_type ? 'col-sm-10 offset-sm-1 search-form' : 'search-form '" novalidate>
               <div class="input-group">
                 <span class="input-group-text" id="addon-wrapping"><img src="assets/images/search.svg"
                     class="img-fluid"></span>
                 <div class="ng-autocomplete font-kanz-ul-marjan font-25">
-                  <ng-autocomplete [data]="autoData" [debounceTime]="'600'" [isLoading]="isLoading"
-                    [searchKeyword]="keyword" placeholder="Search {{name}}"
-                    (inputChanged)='onChangeSearch($event)' historyIdentifier="autoData" [itemTemplate]="itemTemplate"
+                  <ng-autocomplete [data]="autoData"
+                    [searchKeyword]="keyword" placeholder="Search {{name}}" (inputFocused)="onFocused()"
+                    (inputChanged)='onChangeSearch($event); search($event)' historyIdentifier="autoData" [itemTemplate]="itemTemplate"
                     [notFoundTemplate]="notFoundTemplate" id="search_input"
-                    class="city-search ui-autocomplete-input font-kanz-ul-marjan font-25" formControlName="searchText"
-                    (inputChanged)="search($event)" (inputCleared)="closed()">
+                    class="city-search ui-autocomplete-input font-kanz-ul-marjan font-25"
+                    (inputCleared)="closed()">
                   </ng-autocomplete>
   
                   <div class="search-dropdown" [hidden]="!(autoData?.length > 0)">
                     <ul>
                       <ng-template #itemTemplate let-item>
-  
                         <a class="font-kanz-ul-marjan font-25" [hidden]="!(autoData?.length > 0)">
-                          <p class="font-kanz-ul-marjan text-primary" [innerHTML]="item.Text | highlight : toHighlight"></p>
+                          <p class="font-kanz-ul-marjan text-primary" [innerHTML]="item.verseText"></p>
                         </a>
   
                         <!-- <a class="font-kanz-ul-marjan font-25" [innerHTML]="item.Text | highlight : toHighlight"></a> -->
@@ -50,7 +49,7 @@
                 <div class="sukhn-list-tab">
                   <ul class="sukhn-list">
                     <li class="cp" *ngFor="let item of dataCollection | paginate: config ;let indx = index" >
-                      <a class="d-flex" (click)="navigateToDetailPage(item , indx)" >
+                      <a class="d-flex" (click)="navigateToDetailPage(item )" >
                         <div class="sukhn-list-icon fs-24 text-white">
                           <p class="font-kanz-ul-marjan">{{(indx+1) + ((config.currentPage-1) * config.itemsPerPage)}}</p>
                         </div>

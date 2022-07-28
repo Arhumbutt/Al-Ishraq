@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConstantService } from '@app/shared/services';
@@ -30,7 +30,7 @@ export class QuranListingComponent implements OnInit {
   isTranslationLoaded: boolean;
   toHighlight: string;
   isSearchText: boolean;
-  keyword = 'Text';
+  keyword = 'verseText';
   isNotFound: boolean;
   isSearching: any;
   qType: number;
@@ -66,7 +66,8 @@ export class QuranListingComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private sharedDataService:SharedDataService,
     private router: Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private ngZone:NgZone
   ) { }
   array1:any=[]
   array2:any=[]
@@ -79,19 +80,22 @@ export class QuranListingComponent implements OnInit {
     this.getQuranList()
     this.getAllVerseTypes()
   }
+
   getAllVerseTypes(): void {
     this.allVerseTypes = this.constantService.verseTypesData;
   }
   getQuranList()
   {
     forkJoin({
+      allQuran:this.homeService.getAllQuranTrans(),
       arabic:this.homeService.getAllQuranArabic(this.config),
       trans:this.homeService.getAllQuranTrans(this.config),
       eng:this.homeService.getAllQuranEng(this.config)
-    }).subscribe(({arabic, trans, eng})=>{
+    }).subscribe(({allQuran, arabic, trans, eng})=>{
       this.config.totalItems = Math.max(arabic.total, trans.total, eng.total)
       this.config.currentPage = this.config.currentPage;
       let arabicData = arabic.data;
+      this.autoData = allQuran.data;
       let translatedData = trans.data;
       let engData = eng.data;
       let maxLength = Math.max(arabicData.length, translatedData.length, engData.length);
@@ -121,6 +125,14 @@ export class QuranListingComponent implements OnInit {
   //this.getAllAutoCompleteSearch(text);
     this.searchHadeethData();
    }
+  onFocused(){
+    this.ngZone.runOutsideAngular(()=>{
+      setTimeout(() => {
+        let overlayAutocomplete:HTMLElement = document.querySelector('.autocomplete-overlay');
+        overlayAutocomplete.remove();
+      }, 1000);
+    })
+  }
    searchHadeethData()
   {
     // const searchText = this.searchForm.controls.searchText.value;
@@ -164,10 +176,9 @@ export class QuranListingComponent implements OnInit {
   //   }
   //   }
 
-  navigateToDetailPage(translationId , chapterId , verseId )
+  navigateToDetailPage(item )
   {
-    debugger
-    this.router.navigate(['quran/quran-detail'] , {queryParams:{translationId:translationId , chapterId:chapterId, verseId:verseId }})
+    // this.router.navigate(['quran/quran-detail'] , {queryParams:{translationId:item.trans.translationID , chapterId:item.trans.chapterID, verseId:item.trans.verseId }})
   }
     closed(): void {
       this.isNotFound = false;
