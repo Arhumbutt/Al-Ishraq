@@ -152,16 +152,24 @@ export class HomeService extends BaseService<any> {
     return this.get(this.apiService.homeApi + endPoint)
       .pipe(map((data: any) => data));
   }
-    getAllQuranArabic(config) {
-    
-    let endPoint = this.homeEndPoints.holyQuranEndpoint +'/'+ 1 + '?page=' + config.currentPage + '&pageSize=' + config.itemsPerPage ; 
+    getAllQuranArabic(config=undefined) {
+    let endPoint = '';
+    if(config) {
+      endPoint = this.homeEndPoints.holyQuranEndpoint +'/'+ 1 + '?page=' + config.currentPage + '&pageSize=' + config.itemsPerPage ; 
+    }else{
+      endPoint = this.homeEndPoints.holyQuranEndpoint +'/'+ 1;
+    }
     return this.get(this.apiService.homeApi + endPoint)
     .pipe(map((data: any) => data));
      
   }
-  getAllQuranTrans(config): Observable<any> {
-    
-    let endPoint = this.homeEndPoints.holyQuranEndpoint +'/'+ 63 + '?page=' + config.currentPage + '&pageSize=' + config.itemsPerPage ; ;
+  getAllQuranTrans(config=undefined): Observable<any> {
+    let endPoint = '';
+    if(config) {
+      endPoint = this.homeEndPoints.holyQuranEndpoint +'/'+ 63 + '?page=' + config.currentPage + '&pageSize=' + config.itemsPerPage ; 
+    }else{
+      endPoint = this.homeEndPoints.holyQuranEndpoint +'/'+ 63;
+    }
     return this.get(this.apiService.homeApi + endPoint)
     .pipe(map((data: any) => data));
   }
