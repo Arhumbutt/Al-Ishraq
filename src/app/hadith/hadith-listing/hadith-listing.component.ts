@@ -32,7 +32,7 @@ export class HadithListingComponent implements OnInit {
   isTranslationLoaded: boolean;
   toHighlight: string;
   isSearchText: boolean;
-  keyword = 'Text';
+  keyword = 'hadithEn';
   isNotFound: boolean;
   isSearching: any;
   qType: number;
@@ -98,14 +98,15 @@ export class HadithListingComponent implements OnInit {
    searchHadeethData()
   {
     const searchText = this.searchForm.controls.searchText.value;
-
+    this.isLoading = true;
       this.homeService.searchHadeeth(this.config, searchText).subscribe(
         data => {
           this.translations = data.data;
+          this.autoData = data.data;
           this.config.totalItems=data.data.length
           this.config.currentPage = this.config.currentPage;
-
-        });
+          this.isLoading = false
+        }, err => this.isLoading = false);
 
 
   }

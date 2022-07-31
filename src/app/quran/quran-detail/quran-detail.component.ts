@@ -24,11 +24,7 @@ export class QuranDetailComponent implements OnInit {
     currentPage: this.constantService.defaultPage,
     totalItems: 0,
   };
-  payload={
-    translationId:0 ,
-    chapterId:0 ,
-    verseId:0 ,
-  }
+  payload:any;
   dataCollection: any = [];
   chapterId: any;
   verseId: any;
@@ -36,13 +32,10 @@ export class QuranDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.router.queryParams.subscribe(params=>{
-      this.payload.chapterId=params.chapterId
-      this.payload.verseId=params.verseId
-      this.payload.translationId=params.translationId
-      console.log(this.payload, 'what is in payload')
+      this.payload=params
       if(this.payload)
       {
-        this.getQuranVerseById(this.payload)
+        this.getQuranVerseById()
       }
 
     })
@@ -84,23 +77,25 @@ export class QuranDetailComponent implements OnInit {
   {
     if(event == 'next')
     {
-      this.route.navigate(['quran/quran-detail'] , {queryParams:{translationId:this.payload.translationId , chapterId: this.payload.chapterId , verseId: this.payload.verseId}})
+      this.config.currentPage = this.config.currentPage+1;
+      this.route.navigate(['quran/quran-detail'] , {queryParams:{chapterId:[Number(this.payload.chapterId[0])+1, Number(this.payload.chapterId[1])+1, Number(this.payload.chapterId[2])+1], verseId:[Number(this.payload.verseId[0])+1, Number(this.payload.verseId[1])+1, Number(this.payload.verseId[2])+1] }})
 
     }
     else if (event == 'previous')
     {
-      this.route.navigate(['quran/quran-detail'] , {queryParams:{id:this.id , recordNo: this.recordNo , currentPage: this.config.currentPage , totalItems:this.config.totalItems}})
+      this.config.currentPage = this.config.currentPage -1;
+      this.route.navigate(['quran/quran-detail'] , {queryParams:{chapterId:[Number(this.payload.chapterId[0])-1, Number(this.payload.chapterId[1])-1, Number(this.payload.chapterId[2])-1], verseId:[Number(this.payload.verseId[0])-1, Number(this.payload.verseId[1])-1, Number(this.payload.verseId[2])-1] }})
     }
 
 
   }
 
-  getQuranVerseById(payload)
+  getQuranVerseById()
   {
     forkJoin({
-      arabic:this.homeService.getQuranArabicVerseById(payload),
-      trans:this.homeService.getQuranEngVerseById(payload),
-      eng:this.homeService.getQuranTransVerseById(payload)
+      arabic:this.homeService.getQuranArabicVerseById({chapterId:this.payload.chapterId[0], verseId:this.payload.verseId[0]}),
+      trans:this.homeService.getQuranEngVerseById({chapterId:this.payload.chapterId[1], verseId:this.payload.verseId[1]}),
+      eng:this.homeService.getQuranTransVerseById({chapterId:this.payload.chapterId[2], verseId:this.payload.verseId[2]})
     }).subscribe(({arabic, trans, eng})=>{
       this.config.totalItems = Math.max(arabic.total, trans.total, eng.total)
       this.config.currentPage = this.config.currentPage;

@@ -32,7 +32,7 @@ export class MenuFormComponent implements OnInit {
   isTranslationLoaded: boolean;
   toHighlight: string;
   isSearchText: boolean;
-  keyword = 'Text';
+  keyword = 'definationEN';
   isNotFound: boolean;
   isSearching: any;
   qType: number;
@@ -92,6 +92,7 @@ export class MenuFormComponent implements OnInit {
     this.homeService.getAllAutoCompleteSearch(text, this.id).subscribe(
       data => {
         this.autoData = data.Data;
+        console.log(this.autoData, 'aut0o data')
         this.isNotFound = true;
         this.isSearching = false;
         this.isLoading = false;
@@ -125,7 +126,7 @@ export class MenuFormComponent implements OnInit {
     if (text.length < 3) {
      return
     }
-    
+    this.searchQamooseData()
   }
 
   searchWithText(): void {
@@ -143,20 +144,23 @@ export class MenuFormComponent implements OnInit {
     this.homeService.getQamoose(this.config).subscribe(
       data => {
         this.translations = data.data;
+          console.log(this.translations, 'what is in translations')
         this.config.currentPage = this.config.currentPage;
         this.config.totalItems=data.total
       });
   }
   searchQamooseData()
   {
+    this.isLoading = true;
     const searchText = this.menuForm.controls.searchText.value;
-    this.homeService.searchQamoose(this.config, searchText).subscribe(
+    this.homeService.searchQamoose(searchText).subscribe(
       data => {
+        this.isLoading = false;
         this.translations = data.data;
+        this.autoData = data.data;
         this.config.totalItems = data.total;
         this.config.currentPage = this.config.currentPage;
-
-      });
+      }, err=> this.isLoading = false);
   }
 
   onPageChange(event): void {

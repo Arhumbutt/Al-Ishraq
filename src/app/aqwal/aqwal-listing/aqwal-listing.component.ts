@@ -28,7 +28,7 @@ export class AqwalListingComponent implements OnInit {
   isTranslationLoaded: boolean;
   toHighlight: string;
   isSearchText: boolean;
-  keyword = 'Text';
+  keyword = 'aqwaalEn';
   isNotFound: boolean;
   isSearching: any;
   qType: number;
@@ -89,14 +89,15 @@ export class AqwalListingComponent implements OnInit {
    searchAqwalData()
   {
     const searchText = this.searchForm.controls.searchText.value;
-
+    this.isLoading = true
       this.homeService.searchAqwaal(this.config, searchText).subscribe(
         data => {
           this.translations = data.data;
+          this.autoData = data.data;
           this.config.totalItems=data.total
           this.config.currentPage = this.config.currentPage;
-
-        });
+          this.isLoading = false
+        }, err=> this.isLoading = false);
 
 
   }

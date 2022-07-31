@@ -32,7 +32,7 @@ export class KalamListingComponent implements OnInit {
   isTranslationLoaded: boolean;
   toHighlight: string;
   isSearchText: boolean;
-  keyword = 'Text';
+  keyword = 'kalaamEn';
   isNotFound: boolean;
   isSearching: any;
   qType: number;
@@ -95,13 +95,15 @@ export class KalamListingComponent implements OnInit {
    searchKalamData()
   {
     const searchText = this.searchForm.controls.searchText.value;
+    this.isLoading = true;
     this.homeService.searchKalam(this.config, searchText).subscribe(
       data => {
         this.translations = data.data;
+        this.autoData = data.data;
         this.config.totalItems = data.length;
         this.config.currentPage = this.config.currentPage;
-
-      });
+        this.isLoading = false
+      }, err=> this.isLoading = false);
   }
   //  selectEvent(val, index?): void {
 

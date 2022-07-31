@@ -25,7 +25,7 @@ export class BayanMenuComponent implements OnInit  {
   isTranslationLoaded: boolean;
   toHighlight: string;
   isSearchText: boolean;
-  keyword = 'Text';
+  keyword = 'english';
   isNotFound: boolean;
   isSearching: any;
   qType: number;
@@ -220,15 +220,18 @@ export class BayanMenuComponent implements OnInit  {
   }
   searchBayanData()
   {
+    this.isLoading = true;
     const searchText = this.searchForm.value.searchText 
       this.homeService.searchBayan(this.config, searchText).subscribe(
         data => {
           this.isSearchText = true
           this.translations = data.data;
+          this.autoData = data.data;
+          this.autoData[0].english = "al ishraaq"
           this.config.totalItems=data.data.length
           this.config.currentPage = this.config.currentPage;
-
-        });
+          this.isLoading = false
+        }, err=>{this.isLoading=false;});
   }
   onPageChange(event): void {
     window.scrollTo(0,0)
@@ -303,23 +306,10 @@ export class BayanMenuComponent implements OnInit  {
       if (text.length < 3) {
       return;
     }
-    const searchText = text 
-      this.homeService.searchBayan(this.config, searchText).subscribe(
-        data => {
-          this.translations = data.data;
-          this.config.totalItems=data.data.length
-          this.config.currentPage = this.config.currentPage;
-
-        });
-  }
-
-  searchWithText(): void {
-    this.config.currentPage = this.constantService.defaultPage;
-    this.config.itemsPerPage = this.constantService.defaultItemPerPage;
-    if (this.searchForm.value.searchText != null && this.searchForm.value.searchText !== '') {
-      this.isSearchText = true;
-      // this.getAllTranslationTexts();
+    if(text.length == 0 ) {
+      this.autoData = []
+      return
     }
-
+    this.searchBayanData();
   }
 }

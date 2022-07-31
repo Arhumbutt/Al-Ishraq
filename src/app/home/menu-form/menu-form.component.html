@@ -15,7 +15,7 @@
                 class="img-fluid"></span>
             <div class="ng-autocomplete font-kanz-ul-marjan font-25">
               <ng-autocomplete [data]="autoData" [debounceTime]="'600'" [isLoading]="isLoading"
-                [searchKeyword]="keyword" placeholder="Search {{name}}" (selected)='selectEvent($event)'
+                [searchKeyword]="keyword" placeholder="Quran {{name}}" (selected)='selectEvent($event)'
                 (inputChanged)='onChangeSearch($event)' historyIdentifier="autoData" [itemTemplate]="itemTemplate"
                 [notFoundTemplate]="notFoundTemplate" id="search_input"
                 class="city-search ui-autocomplete-input font-kanz-ul-marjan font-25" formControlName="searchText"
@@ -27,7 +27,7 @@
                   <ng-template #itemTemplate let-item>
 
                     <a class="font-kanz-ul-marjan font-25" [hidden]="!(autoData?.length > 0)">
-                      <p class="font-kanz-ul-marjan text-primary" [innerHTML]="item.Text | highlight : toHighlight"></p>
+                      <p class="font-kanz-ul-marjan text-primary" [innerHTML]="item.definationEN | highlight : toHighlight"></p>
                     </a>
 
                     <!-- <a class="font-kanz-ul-marjan font-25" [innerHTML]="item.Text | highlight : toHighlight"></a> -->
@@ -130,7 +130,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="tab-pane" id="miqaat" role="tabpanel">
+                <div class="tab-pane" id="miqaat" role="tabpanel">  
                   <div class="row justify-content-center equal-height admin-head-wrap flex-row-reverse">
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12 bait-list">
                       <div class="admin-step-form-wrap bait-list-v-2 overflow-hddn">
