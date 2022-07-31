@@ -12,8 +12,9 @@
                 <span class="input-group-text" id="addon-wrapping"><img src="assets/images/search.svg"
                     class="img-fluid"></span>
                 <div class="ng-autocomplete font-kanz-ul-marjan font-25">
-                  <ng-autocomplete [data]="autoData"
-                    [searchKeyword]="keyword" placeholder="Search {{name}}" (inputFocused)="onFocused()"
+                  <ng-autocomplete #quranSearch [data]="autoData" [debounceTime]="'600'" [isLoading]="isLoading"
+                    [searchKeyword]="keyword" placeholder="Search {{name}}"
+                    (selected)='selectEvent($event)'
                     (inputChanged)='onChangeSearch($event); search($event)' historyIdentifier="autoData" [itemTemplate]="itemTemplate"
                     [notFoundTemplate]="notFoundTemplate" id="search_input"
                     class="city-search ui-autocomplete-input font-kanz-ul-marjan font-25"
@@ -36,7 +37,7 @@
                   </ng-template>
   
                   <button class="btn btn-primary btn-lg" type="submit" id="button-addon2"
-                  (click)="searchHadeethData()">Search</button>
+                  (click)="searchQuranListing()">Search</button>
   
                 </div>
               </div>

@@ -103,9 +103,9 @@ export class HomeService extends BaseService<any> {
       .pipe(map((data: any) => data));
   }
 
-  searchQamoose(config,searchtext)
+  searchQamoose(searchtext)
   {
-    let endPoint = this.homeEndPoints.qamoosEndPoint +'/Search/'+ searchtext +'?page=' + config.currentPage + '&pageSize=' + config.itemsPerPage ;
+    let endPoint = this.homeEndPoints.qamoosEndPoint +'/Search/'+ searchtext;
     return this.get(this.apiService.homeApi + endPoint)
       .pipe(map((data: any) => data));
   }
@@ -134,21 +134,21 @@ export class HomeService extends BaseService<any> {
       .pipe(map((data: any) => data));
   }
 
-  getQuranArabicVerseById(payload): Observable<any> {
+    getQuranArabicVerseById(payload): Observable<any> {
     let endPoint = this.homeEndPoints.holyQuranEndpoint ;
-      endPoint = endPoint + '/' + payload.translationId + '/Chapter/'+ payload.chapterId +'/Verse/'+ payload.verseId;
+      endPoint = endPoint + '/' + 1 + '/Chapter/'+ payload.chapterId +'/Verse/'+ payload.verseId;
     return this.get(this.apiService.homeApi + endPoint)
       .pipe(map((data: any) => data));
   }
   getQuranEngVerseById(payload): Observable<any> {
     let endPoint = this.homeEndPoints.holyQuranEndpoint ;
-      endPoint = endPoint +'/' + payload.translationId + '/Chapter/'+ payload.chapterId +'/Verse/'+ payload.verseId;
+      endPoint = endPoint +'/' + 59 + '/Chapter/'+ payload.chapterId +'/Verse/'+ payload.verseId;
     return this.get(this.apiService.homeApi + endPoint)
       .pipe(map((data: any) => data));
   }
   getQuranTransVerseById(payload): Observable<any> {
     let endPoint = this.homeEndPoints.holyQuranEndpoint ;
-      endPoint = endPoint + '/' + payload.translationId + '/Chapter/'+ payload.chapterId +'/Verse/'+ payload.verseId;
+      endPoint = endPoint + '/' + 63 + '/Chapter/'+ payload.chapterId +'/Verse/'+ payload.verseId;
     return this.get(this.apiService.homeApi + endPoint)
       .pipe(map((data: any) => data));
   }
@@ -171,6 +171,11 @@ export class HomeService extends BaseService<any> {
       endPoint = this.homeEndPoints.holyQuranEndpoint +'/'+ 63;
     }
     return this.get(this.apiService.homeApi + endPoint)
+    .pipe(map((data: any) => data));
+  }
+  searchQuranTrans(searchQuery=''): Observable<any> {
+    searchQuery = searchQuery?searchQuery:'';
+    return this.get(this.apiService.homeApi + this.homeEndPoints.holyQuranEndpoint+'/Search/'+searchQuery)
     .pipe(map((data: any) => data));
   }
   getAllQuranEng(config): Observable<any> {
@@ -246,7 +251,7 @@ export class HomeService extends BaseService<any> {
   searchBayan(config,searchtext)
   {
     const categoryName= config.categoryName
-    let endPoint = this.homeEndPoints.getContentBySubArticleId +'/'+categoryName+'/Search/'+ searchtext +'?page=' + config.currentPage + '&pageSize=' + config.itemsPerPage ;
+    let endPoint = this.homeEndPoints.getContentBySubArticleId +'/'+categoryName+'/Search/'+ searchtext ;
     return this.get(this.apiService.homeApi + endPoint)
       .pipe(map((data: any) => data));
   }

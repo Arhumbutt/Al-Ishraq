@@ -11,7 +11,7 @@
               class="img-fluid"></span>
           <div class="ng-autocomplete font-kanz-ul-marjan font-25">
             <ng-autocomplete [data]="autoData" [debounceTime]="'600'" [isLoading]="isLoading"
-              [searchKeyword]="keyword" placeholder="Search {{name}}"
+              placeholder="Search {{name}}"
               (inputChanged)='onChangeSearch($event)' historyIdentifier="autoData" [itemTemplate]="itemTemplate"
               [notFoundTemplate]="notFoundTemplate" id="search_input"
               class="city-search ui-autocomplete-input font-kanz-ul-marjan font-25" formControlName="searchText"
@@ -23,7 +23,7 @@
                 <ng-template #itemTemplate let-item>
 
                   <a class="font-kanz-ul-marjan font-25" [hidden]="!(autoData?.length > 0)">
-                    <p class="font-kanz-ul-marjan text-primary" [innerHTML]="item.Text | highlight : toHighlight"></p>
+                    <p class="font-kanz-ul-marjan text-primary" [innerHTML]="item?.english | highlight : toHighlight"></p>
                   </a>
                 </ng-template>
               </ul>

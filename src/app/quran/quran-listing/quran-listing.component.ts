@@ -52,7 +52,7 @@ export class QuranListingComponent implements OnInit {
   allVerseTypes:any=[]
   searchedText: any;
   dataCollection:any=[]
-  
+  quranSearchValue:string = '';
   dataObject:any={}
   config = {
     itemsPerPage: this.constantService.defaultItemPerPage,
@@ -87,15 +87,13 @@ export class QuranListingComponent implements OnInit {
   getQuranList()
   {
     forkJoin({
-      allQuran:this.homeService.getAllQuranTrans(),
       arabic:this.homeService.getAllQuranArabic(this.config),
       trans:this.homeService.getAllQuranTrans(this.config),
       eng:this.homeService.getAllQuranEng(this.config)
-    }).subscribe(({allQuran, arabic, trans, eng})=>{
+    }).subscribe(({arabic, trans, eng})=>{
       this.config.totalItems = Math.max(arabic.total, trans.total, eng.total)
       this.config.currentPage = this.config.currentPage;
       let arabicData = arabic.data;
-      this.autoData = allQuran.data;
       let translatedData = trans.data;
       let engData = eng.data;
       let maxLength = Math.max(arabicData.length, translatedData.length, engData.length);
@@ -114,24 +112,25 @@ export class QuranListingComponent implements OnInit {
   }
   onChangeSearch(text): void {
     this.isNotFound = false;
+    this.quranSearchValue = text;
     if(text.length == 0)
     {
-      this.getQuranList()
+      this.autoData = [];
     }
     if (text.length < 3) {
      return
     }
-
-  //this.getAllAutoCompleteSearch(text);
-    this.searchHadeethData();
+    this.searchQuranListing()
    }
-  onFocused(){
-    this.ngZone.runOutsideAngular(()=>{
-      setTimeout(() => {
-        let overlayAutocomplete:HTMLElement = document.querySelector('.autocomplete-overlay');
-        overlayAutocomplete.remove();
-      }, 1000);
-    })
+  searchQuranListing() {
+    this.isLoading = true;
+    this.homeService.searchQuranTrans(this.quranSearchValue).subscribe((res)=>{
+      this.isLoading = false;
+      this.autoData = res.data;
+    }, err=>this.isLoading=false)
+  }
+  selectEvent(event) {
+
   }
    searchHadeethData()
   {
@@ -178,7 +177,7 @@ export class QuranListingComponent implements OnInit {
 
   navigateToDetailPage(item )
   {
-    // this.router.navigate(['quran/quran-detail'] , {queryParams:{translationId:item.trans.translationID , chapterId:item.trans.chapterID, verseId:item.trans.verseId }})
+    this.router.navigate(['quran/quran-detail'] , {queryParams:{chapterId:[item.arabic.chapterID, item.eng.chapterID, item.trans.chapterID], verseId:[item.arabic.verseId, item.eng.verseId, item.trans.verseId] }})
   }
     closed(): void {
       this.isNotFound = false;

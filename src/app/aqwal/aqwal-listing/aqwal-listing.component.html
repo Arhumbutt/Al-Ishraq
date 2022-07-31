@@ -25,7 +25,7 @@
                     <ng-template #itemTemplate let-item>
 
                       <a class="font-kanz-ul-marjan font-25" [hidden]="!(autoData?.length > 0)">
-                        <p class="font-kanz-ul-marjan text-primary" [innerHTML]="item.Text | highlight : toHighlight"></p>
+                        <p class="font-kanz-ul-marjan text-primary" [innerHTML]="item.aqwaalEn | highlight : toHighlight"></p>
                       </a>
 
                       <!-- <a class="font-kanz-ul-marjan font-25" [innerHTML]="item.Text | highlight : toHighlight"></a> -->
